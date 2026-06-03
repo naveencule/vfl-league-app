@@ -83,6 +83,7 @@ def custom_admin_logout(request):
         del request.session['is_vfl_admin']
     return redirect('custom_admin_login')
 
+
 def standings_table(request):
     teams = Team.objects.all()
     table_data = []
@@ -93,7 +94,20 @@ def standings_table(request):
     
     # Sort: Points -> Goal Difference -> Goals For
     sorted_table = sorted(table_data, key=lambda x: (-x['pts'], -x['gd'], -x['gf']))
-    return render(request, 'league/standings.html', {'table': sorted_table})
+    
+    # --- NEW: Fetch Fixtures for the User Frontend ---
+    # 1. Upcoming Matches: Status is Scheduled, ordered oldest to newest
+    upcoming_matches = Match.objects.filter(status='Scheduled').order_by('match_date')
+    
+    # 2. Match Results: Status is Played, ordered latest to oldest
+    match_results = Match.objects.filter(status='Played').order_by('-match_date')
+
+    context = {
+        'table': sorted_table,
+        'upcoming_matches': upcoming_matches,
+        'match_results': match_results,
+    }
+    return render(request, 'league/standings.html', context)
 
 
 def top_scorers(request):

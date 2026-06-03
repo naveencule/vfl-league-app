@@ -1,50 +1,102 @@
 {% extends 'league/base.html' %}
 {% block content %}
-<div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-    <div class="p-6 bg-gradient-to-r from-blue-900 to-indigo-900 text-white">
-        <h1 class="text-2xl font-bold">League Standings</h1>
-        <p class="text-blue-200 text-sm mt-1">Real-time update logic tracked natively</p>
+<div class="space-y-10">
+    <div class="bg-white border border-gray-200 rounded-2xl shadow-xs overflow-hidden">
+        <div class="p-5 bg-gray-50 border-b border-gray-200">
+            <h2 class="text-xl font-bold text-gray-900 tracking-tight">🏆 VFL League Standings</h2>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="w-full text-left text-sm border-collapse">
+                <thead>
+                    <tr class="bg-gray-100/70 border-b border-gray-200 text-gray-600 font-bold uppercase text-xs tracking-wider">
+                        <th class="p-4">Pos</th>
+                        <th class="p-4">Team</th>
+                        <th class="p-4 text-center">MP</th>
+                        <th class="p-4 text-center">W</th>
+                        <th class="p-4 text-center">D</th>
+                        <th class="p-4 text-center">L</th>
+                        <th class="p-4 text-center">GF</th>
+                        <th class="p-4 text-center">GA</th>
+                        <th class="p-4 text-center">GD</th>
+                        <th class="p-4 text-center text-blue-600">Pts</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-100 font-medium text-gray-700">
+                    {% for row in table %}
+                    <tr class="hover:bg-gray-50/50 transition">
+                        <td class="p-4 font-bold text-gray-900">{{ forloop.counter }}</td>
+                        <td class="p-4 font-bold text-gray-900">{{ row.team.name }}</td>
+                        <td class="p-4 text-center">{{ row.mp }}</td>
+                        <td class="p-4 text-center text-emerald-600">{{ row.w }}</td>
+                        <td class="p-4 text-center">{{ row.d }}</td>
+                        <td class="p-4 text-center text-red-500">{{ row.l }}</td>
+                        <td class="p-4 text-center">{{ row.gf }}</td>
+                        <td class="p-4 text-center">{{ row.ga }}</td>
+                        <td class="p-4 text-center {% if row.gd >= 0 %}text-gray-700{% else %}text-red-500{% endif %}">
+                            {% if row.gd > 0 %}+{% endif %}{{ row.gd }}
+                        </td>
+                        <td class="p-4 text-center font-black text-blue-600 text-base">{{ row.pts }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
-    
-    <div class="overflow-x-auto">
-        <table class="w-full text-left border-collapse">
-            <thead>
-                <tr class="bg-gray-100 border-b border-gray-200 text-gray-600 uppercase text-xs font-bold tracking-wider">
-                    <th class="px-6 py-4 text-center">Pos</th>
-                    <th class="px-6 py-4">Team Club</th>
-                    <th class="px-4 py-4 text-center">MP</th>
-                    <th class="px-4 py-4 text-center">W</th>
-                    <th class="px-4 py-4 text-center">D</th>
-                    <th class="px-4 py-4 text-center">L</th>
-                    <th class="px-4 py-4 text-center">GF</th>
-                    <th class="px-4 py-4 text-center">GA</th>
-                    <th class="px-4 py-4 text-center">GD</th>
-                    <th class="px-6 py-4 text-center bg-blue-50 text-blue-900 font-black">Pts</th>
-                </tr>
-            </thead>
-            <tbody class="divide-y divide-gray-100 text-sm font-medium text-gray-700">
-                {% for row in table %}
-                <tr class="hover:bg-gray-50 transition">
-                    <td class="px-6 py-4 text-center font-bold text-gray-500">{{ forloop.counter }}</td>
-                    <td class="px-6 py-4 font-semibold text-gray-900 text-base">{{ row.team.name }}</td>
-                    <td class="px-4 py-4 text-center">{{ row.mp }}</td>
-                    <td class="px-4 py-4 text-center text-green-600">{{ row.w }}</td>
-                    <td class="px-4 py-4 text-center text-gray-500">{{ row.d }}</td>
-                    <td class="px-4 py-4 text-center text-red-600">{{ row.l }}</td>
-                    <td class="px-4 py-4 text-center">{{ row.gf }}</td>
-                    <td class="px-4 py-4 text-center">{{ row.ga }}</td>
-                    <td class="px-4 py-4 text-center {% if row.gd > 0 %}text-green-600{% elif row.gd < 0 %}text-red-600{% endif %}">
-                        {% if row.gd > 0 %}+{% endif %}{{ row.gd }}
-                    </td>
-                    <td class="px-6 py-4 text-center bg-blue-50/50 text-blue-900 text-base font-black">{{ row.pts }}</td>
-                </tr>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        
+        <div class="bg-white border border-gray-200 rounded-2xl shadow-xs overflow-hidden">
+            <div class="p-5 bg-green-50/60 border-b border-gray-200 flex items-center justify-between">
+                <h3 class="text-lg font-bold text-gray-900">📅 Upcoming Games</h3>
+                <span class="bg-green-100 text-green-800 text-xs font-bold px-2.5 py-1 rounded-full uppercase">Scheduled</span>
+            </div>
+            <div class="divide-y divide-gray-100">
+                {% for match in upcoming_matches %}
+                <div class="p-5 flex justify-between items-center hover:bg-gray-50/40 transition">
+                    <div class="space-y-1">
+                        <div class="flex items-center gap-3 text-base font-bold text-gray-900">
+                            <span>{{ match.home_team.name }}</span>
+                            <span class="text-xs font-semibold text-gray-400 bg-gray-100 px-2 py-0.5 rounded border">VS</span>
+                            <span>{{ match.away_team.name }}</span>
+                        </div>
+                        <p class="text-xs text-gray-500 font-medium">📍 Ground: {{ match.home_team.home_ground }}</p>
+                    </div>
+                    <div class="text-right">
+                        <span class="text-sm font-black text-gray-800 block">{{ match.match_date|date:"M d" }}</span>
+                        <span class="text-xs font-bold text-indigo-600 block bg-indigo-50 px-2 py-0.5 rounded mt-0.5">{{ match.match_date|date:"H:i" }} hrs</span>
+                    </div>
+                </div>
                 {% empty %}
-                <tr>
-                    <td colspan="10" class="text-center py-8 text-gray-400 font-normal">No operational team entries logged.</td>
-                </tr>
+                <div class="p-8 text-center text-gray-400 font-medium text-sm">No upcoming fixtures scheduled at the moment.</div>
                 {% endfor %}
-            </tbody>
-        </table>
+            </div>
+        </div>
+
+        <div class="bg-white border border-gray-200 rounded-2xl shadow-xs overflow-hidden">
+            <div class="p-5 bg-gray-50 border-b border-gray-200 flex items-center justify-between">
+                <h3 class="text-lg font-bold text-gray-900">🏁 Match Results</h3>
+                <span class="bg-gray-200 text-gray-700 text-xs font-bold px-2.5 py-1 rounded-full uppercase">Completed</span>
+            </div>
+            <div class="divide-y divide-gray-100">
+                {% for match in match_results %}
+                <div class="p-5 flex justify-between items-center hover:bg-gray-50/40 transition">
+                    <div class="space-y-0.5">
+                        <div class="flex items-center gap-4 text-base font-black text-gray-900">
+                            <span class="{% if match.home_score < match.away_score %}text-gray-400 font-medium{% endif %}">{{ match.home_team.name }}</span>
+                            <span class="bg-gray-900 text-white font-mono px-3 py-1 text-sm rounded-lg tracking-wider shadow-sm">
+                                {{ match.home_score }} - {{ match.away_score }}
+                            </span>
+                            <span class="{% if match.away_score < match.home_score %}text-gray-400 font-medium{% endif %}">{{ match.away_team.name }}</span>
+                        </div>
+                        <p class="text-xs text-gray-400 font-normal">Match finalized on {{ match.match_date|date:"M d, Y" }}</p>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="p-8 text-center text-gray-400 font-medium text-sm">No match results recorded yet. Tournament kickoff coming soon!</div>
+                {% endfor %}
+            </div>
+        </div>
+
     </div>
 </div>
 {% endblock %}
