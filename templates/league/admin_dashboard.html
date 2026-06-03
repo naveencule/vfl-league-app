@@ -1,13 +1,21 @@
 {% extends 'league/base.html' %}
 {% block content %}
 <div class="space-y-8">
-    <div class="border-b border-gray-200 pb-4">
-        <h1 class="text-3xl font-black text-gray-900 tracking-tight">System Admin Control Center</h1>
-        <p class="text-gray-500">Add entities and access live real-time match logging arrays.</p>
+    <!-- Updated Header: Added a flex row wrapper and a secure logout action trigger -->
+    <div class="border-b border-gray-200 pb-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div>
+            <h1 class="text-3xl font-black text-gray-900 tracking-tight">System Admin Control Center</h1>
+            <p class="text-gray-500">Add entities and access live real-time match logging arrays.</p>
+        </div>
+        <div>
+            <a href="{% url 'custom_admin_logout' %}" class="bg-red-600 hover:bg-red-700 text-white font-bold px-4 py-2.5 rounded-xl text-sm transition shadow-sm inline-block">
+                🔒 Logout Session
+            </a>
+        </div>
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        
+        <!-- Register New Team Card -->
         <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-xs flex flex-col justify-between">
             <div>
                 <h2 class="text-lg font-bold text-gray-800 border-b pb-3 mb-4">🛡️ Register New Team</h2>
@@ -27,6 +35,7 @@
             </div>
         </div>
 
+        <!-- Enlist New Player Profile Card -->
         <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-xs flex flex-col justify-between">
             <div>
                 <h2 class="text-lg font-bold text-gray-800 border-b pb-3 mb-4">🏃 Enlist New Player Profile</h2>
@@ -46,6 +55,7 @@
             </div>
         </div>
 
+        <!-- Schedule New Match Card -->
         <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-xs flex flex-col justify-between">
             <div>
                 <h2 class="text-lg font-bold text-gray-800 border-b pb-3 mb-4">📅 Schedule New Match</h2>
@@ -66,6 +76,7 @@
         </div>
     </div>
 
+    <!-- Match Schedules Registry Output Grid -->
     <div class="bg-white border border-gray-200 rounded-xl shadow-xs overflow-hidden">
         <div class="p-5 bg-gray-50 border-b border-gray-200">
             <h2 class="text-lg font-bold text-gray-800">📅 Match Schedules & Live Record Engine</h2>
@@ -93,7 +104,8 @@
                 </div>
             </div>
             {% empty %}
-            <div class="p-8 text-center text-gray-400">No scheduled matches found in SQLite storage. Create one above!</div>
+            <!-- FIXED: Updated text to accurately represent your production cloud database environment -->
+            <div class="p-8 text-center text-gray-400">No scheduled matches found in Supabase Cloud Storage. Create one above!</div>
             {% endfor %}
         </div>
     </div>

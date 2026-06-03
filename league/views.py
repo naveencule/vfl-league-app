@@ -54,6 +54,35 @@ class PlayerEditForm(forms.ModelForm):
 # PUBLIC VIEWS (User Facing Side)
 # ==========================================
 
+
+def vfl_admin_required(view_func):
+    """Custom decorator that bypasses Django auth tables and relies on code-level sessions."""
+    def _wrapped_view(request, *args, **kwargs):
+        if not request.session.get('is_vfl_admin'):
+            return redirect('custom_admin_login')
+        return view_func(request, *args, **kwargs)
+    return _wrapped_view
+
+# --- NEW: Custom Hardcoded Login/Logout Views ---
+def custom_admin_login(request):
+    if request.method == "POST":
+        username_input = request.POST.get("username")
+        password_input = request.POST.get("password")
+        
+        if username_input == "vflmanager" and password_input == "VflLeague2026!":
+            request.session['is_vfl_admin'] = True
+            request.session.modified = True
+            return redirect('admin_dashboard')  # Redirects to your existing path/name
+        else:
+            messages.error(request, "Invalid Administrative Credentials.")
+            
+    return render(request, 'custom_admin/login.html')
+
+def custom_admin_logout(request):
+    if 'is_vfl_admin' in request.session:
+        del request.session['is_vfl_admin']
+    return redirect('custom_admin_login')
+
 def standings_table(request):
     teams = Team.objects.all()
     table_data = []
@@ -87,7 +116,7 @@ def clean_sheets_leaderboard(request):
 # ==========================================
 # CUSTOM ADMIN PORTAL VIEWS
 # ==========================================
-@user_passes_test(lambda u: u.is_staff)
+@vfl_admin_required
 def admin_dashboard(request):
     """Central control panel for creating teams, players, matches, and viewing fixtures."""
     teams = Team.objects.all()
@@ -128,7 +157,7 @@ def admin_dashboard(request):
     }
     return render(request, 'league/admin_dashboard.html', context)
 
-@user_passes_test(lambda u: u.is_staff)
+@vfl_admin_required
 def manage_match_events(request, match_id):
     """The central Match Console room allowing infinite updates and removals."""
     match = get_object_or_404(Match, id=match_id)
@@ -195,14 +224,14 @@ def manage_match_events(request, match_id):
 # ROSTER VIEW & DATA EDITING LOGIC
 # ==========================================
 
-@user_passes_test(lambda u: u.is_staff)
+@vfl_admin_required
 def manage_rosters(request):
     """Lists all teams pre-mapped with their relational nested player querysets."""
     teams = Team.objects.all().prefetch_related('players')
     return render(request, 'league/manage_rosters.html', {'teams': teams})
 
 
-@user_passes_test(lambda u: u.is_staff)
+@vfl_admin_required
 def edit_team(request, team_id):
     """Fetches a specific team object instance and overrides its file/string variables."""
     team = get_object_or_404(Team, id=team_id)
@@ -216,7 +245,7 @@ def edit_team(request, team_id):
     return render(request, 'league/edit_team.html', {'form': form, 'team': team})
 
 
-@user_passes_test(lambda u: u.is_staff)
+@vfl_admin_required
 def edit_player(request, player_id):
     """Fetches a specific player object instance and updates their team or position values."""
     player = get_object_or_404(Player, id=player_id)
