@@ -1,61 +1,121 @@
 {% extends 'league/base.html' %}
+
 {% block content %}
-<div class="max-w-4xl mx-auto space-y-8 animate-fade-in">
-    <div class="border-b border-gray-200 pb-4">
-        <h1 class="text-3xl font-black text-gray-900 tracking-tight">Fair Play & Suspension Tracking Radar</h1>
-        <p class="text-gray-500 text-sm">Official tracking feed monitoring card limits, semi-final resets, and active match bans.</p>
+<div class="max-w-5xl mx-auto space-y-10">
+    
+    <!-- Minimalist Broadcast-Style Header -->
+    <div class="border-b-2 border-zinc-800 pb-6 opacity-0 animate-fade-in-up">
+        <h1 class="text-3xl md:text-5xl font-black text-white uppercase tracking-tighter">
+            Discipline Radar
+        </h1>
+        <p class="text-zinc-500 font-medium mt-2 text-sm uppercase tracking-[0.15em]">
+            Fair Play & Suspension Tracking Feed
+        </p>
     </div>
 
-    <!-- Rule Explanation Notice Block Box Callout -->
-    <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 text-xs text-slate-600 space-y-1.5 shadow-2xs">
-        <p class="font-bold text-slate-800 uppercase tracking-wider">Tournament Disciplinary Rules Matrix:</p>
-        <p>• 🟥 **Single Match Dismissal:** Getting 2 Yellow Cards in 1 match results in an immediate suspension.</p>
-        <p>• 🟨 **Accumulation Trap:** Collecting 3 Yellow Cards across different standard group league matches triggers a automatic next-game ban.</p>
-        <p>• 🔄 **Semi-Final Amnesty:** All accumulated yellow metrics drop back down to **0** upon qualifying for the semi-finals.</p>
-    </div>
-
-    <!-- Main Live Data Grid Board Presentation -->
-    <div class="bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden">
-        <div class="p-4 bg-gray-50 border-b border-gray-200 font-bold text-gray-800 text-sm">
-            Live Player Disciplinary Registry Logs
-        </div>
+    <!-- Technical Rule Matrix -->
+    <div class="bg-black/50 border border-zinc-800/80 p-6 opacity-0 animate-fade-in-up delay-100 flex flex-col gap-4 relative">
+        <div class="absolute top-0 right-0 w-32 h-32 bg-rose-500/5 rounded-full blur-3xl pointer-events-none"></div>
         
-        <div class="divide-y divide-gray-100">
+        <h3 class="font-bold text-zinc-300 uppercase tracking-[0.2em] text-xs flex items-center gap-2.5">
+            <span class="w-2 h-2 rounded-full bg-rose-600 animate-pulse"></span>
+            Tournament Rules Matrix
+        </h3>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-[11px] text-zinc-400 uppercase tracking-wider font-medium mt-2">
+            <div class="bg-[#111111] border border-zinc-800/60 p-4 border-l-2 border-l-rose-500 hover:bg-[#151515] transition-colors">
+                <span class="text-rose-500 font-black block mb-1.5 tracking-widest">Single Match Dismissal</span>
+                2 Yellow Cards in 1 match = Immediate suspension.
+            </div>
+            <div class="bg-[#111111] border border-zinc-800/60 p-4 border-l-2 border-l-amber-400 hover:bg-[#151515] transition-colors">
+                <span class="text-amber-400 font-black block mb-1.5 tracking-widest">Accumulation Trap</span>
+                3 Yellow Cards across standard matches = Next-game ban.
+            </div>
+            <div class="bg-[#111111] border border-zinc-800/60 p-4 border-l-2 border-l-emerald-500 hover:bg-[#151515] transition-colors">
+                <span class="text-emerald-500 font-black block mb-1.5 tracking-widest">Semi-Final Amnesty</span>
+                Accumulated metrics drop to 0 upon SF qualification.
+            </div>
+        </div>
+    </div>
+
+    <!-- Live Data Grid Board -->
+    <div>
+        <!-- Column Headers -->
+        <div class="flex text-[10px] font-bold text-zinc-500 uppercase tracking-[0.2em] mb-2 px-2 opacity-0 animate-fade-in-up delay-200">
+            <div class="w-16 text-center">Status</div>
+            <div class="flex-1 pl-4">Player Details</div>
+            <div class="w-32 text-center">Cards</div>
+            <div class="w-48 text-right pr-4">Eligibility</div>
+        </div>
+
+        <div class="space-y-1.5">
             {% for item in board %}
-            <div class="p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 {% if item.suspended %}bg-red-50/30{% endif %} hover:bg-gray-50/60 transition">
-                <div class="flex items-center space-x-4">
-                    <div class="text-2xl">
-                        {% if item.suspended %}❌{% else %}🟨{% endif %}
-                    </div>
-                    <div>
-                        <h4 class="font-bold text-gray-950 text-base">{{ item.player.name }}</h4>
-                        <p class="text-xs text-gray-500 font-semibold">{{ item.player.team.name }}</p>
+            <!-- Staggered Row Animation -->
+            <div class="group relative bg-[#111111] hover:bg-[#1a1a1a] transition-all duration-300 flex items-stretch min-h-[72px] opacity-0 animate-fade-in-up border-l-2
+                {% if item.suspended %} border-rose-600 {% else %} border-zinc-800 hover:border-amber-400 {% endif %}"
+                style="animation-delay: {{ forloop.counter }}50ms;">
+
+                <!-- Status Visualizer (CSS Cards replacing Emojis) -->
+                <div class="w-16 flex justify-center items-center bg-black/40">
+                    {% if item.suspended %}
+                        <div class="w-3.5 h-5 bg-rose-600 rounded-[2px] shadow-[0_0_12px_rgba(225,29,72,0.5)] transform rotate-6 border border-rose-400/50"></div>
+                    {% else %}
+                        <div class="w-3.5 h-5 bg-amber-400 rounded-[2px] shadow-[0_0_12px_rgba(251,191,36,0.2)] transform -rotate-6 border border-amber-200/50"></div>
+                    {% endif %}
+                </div>
+
+                <!-- Player Details -->
+                <div class="flex-1 flex flex-col justify-center pl-6 z-10 py-2">
+                    <h4 class="text-lg font-bold text-zinc-200 uppercase tracking-wide group-hover:text-white transition-colors">
+                        {{ item.player.name }}
+                    </h4>
+                    <p class="text-[10px] text-zinc-500 font-bold uppercase tracking-widest mt-0.5 group-hover:text-zinc-400 transition-colors">
+                        {{ item.player.team.name }}
+                    </p>
+                </div>
+
+                <!-- Card Count Stat -->
+                <div class="w-32 flex justify-center items-center border-l border-r border-zinc-800/50 bg-black/20">
+                    <div class="text-center">
+                        <span class="font-mono text-2xl font-black text-white leading-none block">{{ item.yellows }}</span>
+                        <span class="text-[9px] text-zinc-500 uppercase tracking-widest font-bold mt-1 block">Yellows</span>
                     </div>
                 </div>
-                
-                <div class="flex items-center space-x-6 justify-between sm:justify-end">
-                    <div class="text-sm font-medium text-gray-600">
-                        Cards: <span class="font-mono font-bold text-gray-950">{{ item.yellows }}</span> Yellows
-                    </div>
-                    <div>
+
+                <!-- Eligibility Status -->
+                <div class="w-48 flex justify-end items-center pr-6 z-10 bg-gradient-to-l from-[#0a0a0a]/80 to-transparent">
+                    <div class="text-right">
                         {% if item.suspended %}
-                        <span class="bg-red-100 text-red-800 border border-red-200 font-bold text-xs px-3 py-1 rounded-full uppercase tracking-wide">
-                            ⛔ Suspended ({{ item.reason }})
-                        </span>
+                            <span class="text-xs font-black text-rose-500 uppercase tracking-widest block drop-shadow-[0_0_8px_rgba(225,29,72,0.3)]">
+                                Suspended
+                            </span>
+                            <span class="text-[9px] text-zinc-500 uppercase tracking-widest block mt-0.5">
+                                {{ item.reason }}
+                            </span>
                         {% else %}
-                        <span class="bg-green-100 text-green-800 border border-green-200 font-bold text-xs px-3 py-1 rounded-full uppercase tracking-wide">
-                            ✅ Cleared Eligible
-                        </span>
+                            <span class="text-xs font-black text-emerald-500 uppercase tracking-widest block drop-shadow-[0_0_8px_rgba(16,185,129,0.2)]">
+                                Eligible
+                            </span>
+                            <span class="text-[9px] text-zinc-500 uppercase tracking-widest block mt-0.5">
+                                Cleared to Play
+                            </span>
                         {% endif %}
                     </div>
                 </div>
+
             </div>
             {% empty %}
-            <div class="p-12 text-center text-gray-400 italic text-sm">
-                No active tracking infractions on record. The league is currently displaying perfect discipline status!
+            <!-- Empty State -->
+            <div class="flex flex-col items-center justify-center py-20 border border-zinc-800 border-dashed rounded-lg opacity-0 animate-fade-in-up delay-100 bg-[#111111]/50">
+                <svg class="w-12 h-12 text-emerald-500/40 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <p class="text-zinc-400 font-bold text-xs uppercase tracking-widest">Perfect Discipline Status</p>
+                <p class="text-zinc-600 font-medium text-[10px] uppercase tracking-wider mt-1">No active infractions on record</p>
             </div>
             {% endfor %}
         </div>
     </div>
+    
 </div>
 {% endblock %}

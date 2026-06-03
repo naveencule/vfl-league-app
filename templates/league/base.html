@@ -3,47 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Championship Football League</title>
+    <title>VFL 2026</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        /* Custom Premium Animations */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in-up {
+            animation: fadeInUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        .delay-100 { animation-delay: 100ms; }
+        .delay-200 { animation-delay: 200ms; }
+    </style>
 </head>
-<body class="bg-gray-50 text-gray-800 min-h-screen flex flex-col">
+<body class="bg-[#0a0a0a] text-zinc-300 min-h-screen flex flex-col selection:bg-emerald-500/30 selection:text-white">
 
     <!-- Premium Production-Level Header -->
-    <nav class="bg-slate-900 text-slate-100 border-b border-slate-800 sticky top-0 z-50 backdrop-blur-md bg-opacity-95 shadow-sm">
+    <nav class="bg-[#0a0a0a]/80 text-zinc-100 border-b border-zinc-800/80 sticky top-0 z-50 backdrop-blur-xl shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 
                 <!-- Brand / Logo -->
-                <div class="flex items-center">
+                <div class="flex items-center transform transition duration-300 hover:scale-105">
                     <span class="text-lg font-black tracking-widest uppercase text-white">
-                        LEAGUE<span class="text-emerald-400">MASTER</span>
+                        VFL<span class="text-emerald-400">2026</span>
                     </span>
                 </div>
                 
                 <!-- Navigation Links -->
                 <div class="flex items-center space-x-1 text-sm font-semibold tracking-wide">
-                    <a href="{% url 'standings' %}" class="text-slate-300 hover:text-white hover:bg-slate-800 px-3 py-2 rounded-md transition duration-200">
-                        Standings
-                    </a>
-                    <a href="{% url 'top_scorers' %}" class="text-slate-300 hover:text-white hover:bg-slate-800 px-3 py-2 rounded-md transition duration-200">
-                        Top Scorers
-                    </a>
-                    <a href="{% url 'clean_sheets' %}" class="text-slate-300 hover:text-white hover:bg-slate-800 px-3 py-2 rounded-md transition duration-200">
-                        Clean Sheets
-                    </a>
-                    <a href="{% url 'disciplinary_board' %}" class="text-slate-300 hover:text-white hover:bg-slate-800 px-3 py-2 rounded-md transition duration-200 mr-2">
-                        Discipline Radar
-                    </a>
+                    <a href="{% url 'standings' %}" class="text-zinc-400 hover:text-emerald-400 hover:bg-zinc-800/50 px-3 py-2 rounded-md transition duration-300">Standings</a>
+                    <a href="{% url 'top_scorers' %}" class="text-zinc-400 hover:text-emerald-400 hover:bg-zinc-800/50 px-3 py-2 rounded-md transition duration-300">Top Scorers</a>
+                    <a href="{% url 'clean_sheets' %}" class="text-zinc-400 hover:text-emerald-400 hover:bg-zinc-800/50 px-3 py-2 rounded-md transition duration-300">Clean Sheets</a>
+                    <a href="{% url 'disciplinary_board' %}" class="text-zinc-400 hover:text-emerald-400 hover:bg-zinc-800/50 px-3 py-2 rounded-md transition duration-300 mr-2">Discipline Radar</a>
                     
                     <!-- Staff / Administration Portal Links -->
                     {% if user.is_staff %}
-                    <div class="h-5 w-[1px] bg-slate-700 mx-2 hidden sm:block"></div>
-                    <a href="{% url 'admin_dashboard' %}" class="text-emerald-400 hover:text-white hover:bg-emerald-500/10 px-3 py-2 rounded-md transition duration-200 font-medium bg-emerald-500/5 border border-emerald-500/20">
-                        Schedules
-                    </a>
-                    <a href="{% url 'manage_rosters' %}" class="text-emerald-400 hover:text-white hover:bg-emerald-500/10 px-3 py-2 rounded-md transition duration-200 font-medium bg-emerald-500/5 border border-emerald-500/20">
-                        Manage Rosters
-                    </a>
+                    <div class="h-5 w-[1px] bg-zinc-700 mx-2 hidden sm:block"></div>
+                    <a href="{% url 'admin_dashboard' %}" class="text-emerald-400 hover:text-emerald-300 hover:bg-emerald-500/10 px-3 py-2 rounded-md transition duration-300 font-medium bg-emerald-500/5 border border-emerald-500/20">Schedules</a>
+                    <a href="{% url 'manage_rosters' %}" class="text-emerald-400 hover:text-emerald-300 hover:bg-emerald-500/10 px-3 py-2 rounded-md transition duration-300 font-medium bg-emerald-500/5 border border-emerald-500/20">Manage Rosters</a>
                     {% endif %}
                 </div>
 
@@ -52,13 +52,13 @@
     </nav>
 
     <!-- Main Content Area -->
-    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-10">
         {% block content %}{% endblock %}
     </main>
 
     <!-- Footer -->
-    <footer class="bg-gray-800 text-gray-400 text-center py-4 text-xs border-t border-gray-700">
-        &copy; 2026 Football League Hub Engine. Built cleanly with custom Django controllers.
+    <footer class="bg-[#050505] text-zinc-600 text-center py-6 text-xs border-t border-zinc-800/50">
+        &copy; VFL 2026. All rights reserved. Crafted with passion by the VFL Development Team. 
     </footer>
 
 </body>

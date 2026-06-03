@@ -1,51 +1,83 @@
 {% extends 'league/base.html' %}
+
 {% block content %}
-<div class="max-w-6xl mx-auto space-y-8 animate-fade-in">
+<style>
+    form select, form input {
+        color-scheme: dark;
+    }
+    form select option {
+        background-color: #18181b; /* bg-zinc-900 */
+        color: #f4f4f5; /* text-zinc-100 */
+        padding: 8px;
+    }
+    /* Hide number input arrows for clean Jumbotron look */
+    input[type=number]::-webkit-inner-spin-button, 
+    input[type=number]::-webkit-outer-spin-button { 
+        -webkit-appearance: none; 
+        margin: 0; 
+    }
+</style>
+
+<div class="max-w-7xl mx-auto space-y-10">
     
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-white p-4 rounded-xl border border-gray-100 shadow-xs">
-        <div class="flex items-center space-x-3">
-            <span class="bg-indigo-50 text-indigo-600 px-3 py-1.5 rounded-lg font-bold text-xs uppercase tracking-wider">Console Room</span>
-            <h1 class="text-xl font-bold text-gray-900">Match Event Management Center</h1>
+    <div class="border-b-2 border-zinc-800 pb-6 opacity-0 animate-fade-in-up flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4">
+        <div>
+            <h1 class="text-3xl md:text-5xl font-black text-white uppercase tracking-tighter">
+                Match Console
+            </h1>
+            <p class="text-zinc-500 font-medium mt-2 text-sm uppercase tracking-[0.15em] flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
+                Live Event Management Center
+            </p>
         </div>
-        <a href="{% url 'admin_dashboard' %}" class="inline-flex items-center text-sm font-semibold text-gray-600 hover:text-indigo-600 transition group">
-            <span class="mr-1.5 group-hover:-translate-x-1 transition-transform">&larr;</span> Return to Dashboard Panel
-        </a>
+        <div>
+            <a href="{% url 'admin_dashboard' %}" class="bg-[#111111] border border-zinc-800 hover:border-zinc-600 text-zinc-400 hover:text-white font-bold px-5 py-2.5 rounded-md text-xs uppercase tracking-widest transition-all shadow-sm inline-flex items-center gap-2">
+                &larr; Return to Dashboard
+            </a>
+        </div>
     </div>
 
-    <div class="bg-gradient-to-br from-slate-900 to-indigo-950 text-white rounded-2xl shadow-xl overflow-hidden border border-indigo-900">
-        <div class="p-6 bg-black/20 border-b border-white/10 text-center uppercase tracking-widest font-bold text-xs text-indigo-300">
+    <div class="bg-black border border-zinc-800/80 rounded-2xl shadow-2xl overflow-hidden opacity-0 animate-fade-in-up delay-100 relative">
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[80%] h-32 bg-blue-600/10 rounded-[100%] blur-3xl pointer-events-none"></div>
+
+        <div class="px-6 py-3 bg-zinc-900/40 border-b border-zinc-800 text-center uppercase tracking-[0.3em] font-black text-[10px] text-zinc-500">
             Live Scoreboard Operations Engine
         </div>
         
-        <form method="POST" class="p-8 space-y-6">
+        <form method="POST" class="p-8 md:p-12 space-y-10 relative z-10">
             {% csrf_token %}
             <input type="hidden" name="update_match" value="1">
             
-            <div class="flex flex-col md:flex-row items-center justify-center gap-8 lg:gap-16">
-                <div class="text-center flex-1">
-                    <h3 class="text-2xl font-black tracking-tight text-white mb-3">{{ match.home_team.name }}</h3>
-                    <input type="number" name="home_score" value="{{ match.home_score }}" min="0" 
-                           class="w-24 bg-white/10 border border-white/20 focus:border-indigo-400 focus:outline-none rounded-2xl py-3 text-center text-4xl font-black text-yellow-400 transition">
+            <div class="flex flex-col md:flex-row items-center justify-center gap-12 lg:gap-24">
+                
+                <div class="text-center flex-1 flex flex-col items-center">
+                    <h3 class="text-2xl md:text-4xl font-black tracking-tighter text-white uppercase mb-6">{{ match.home_team.name }}</h3>
+                    <div class="bg-[#0a0a0a] border border-zinc-800 rounded-xl p-2 shadow-inner">
+                        <input type="number" name="home_score" value="{{ match.home_score }}" min="0" 
+                               class="w-32 bg-transparent focus:outline-none text-center text-6xl md:text-7xl font-mono font-black text-white focus:text-emerald-400 transition-colors py-4">
+                    </div>
                 </div>
 
-                <div class="flex flex-col items-center justify-center font-bold text-slate-400 px-4">
-                    <span class="text-xs uppercase tracking-wider mb-2">Match Status</span>
-                    <select name="status" class="bg-slate-800 border border-slate-700 text-white rounded-xl px-4 py-2 font-semibold text-sm focus:outline-none focus:border-indigo-400 h-10">
-                        <option value="Scheduled" {% if match.status == 'Scheduled' %}selected{% endif %}>📅 Scheduled</option>
-                        <option value="Played" {% if match.status == 'Played' %}selected{% endif %}>🏁 Played (Finalized)</option>
+                <div class="flex flex-col items-center justify-center font-bold text-zinc-500 px-4 w-full md:w-auto">
+                    <span class="text-[10px] uppercase tracking-[0.2em] mb-3 text-zinc-600">Match Status</span>
+                    <select name="status" class="bg-black border border-zinc-800 text-white rounded-md px-6 py-3 font-black text-sm tracking-widest focus:outline-none focus:border-blue-500 transition-colors uppercase text-center w-full min-w-[200px] shadow-inner cursor-pointer">
+                        <option value="Scheduled" {% if match.status == 'Scheduled' %}selected{% endif %}>Scheduled</option>
+                        <option value="Played" {% if match.status == 'Played' %}selected{% endif %}>Played (FT)</option>
                     </select>
                 </div>
 
-                <div class="text-center flex-1">
-                    <h3 class="text-2xl font-black tracking-tight text-white mb-3">{{ match.away_team.name }}</h3>
-                    <input type="number" name="away_score" value="{{ match.away_score }}" min="0" 
-                           class="w-24 bg-white/10 border border-white/20 focus:border-indigo-400 focus:outline-none rounded-2xl py-3 text-center text-4xl font-black text-yellow-400 transition">
+                <div class="text-center flex-1 flex flex-col items-center">
+                    <h3 class="text-2xl md:text-4xl font-black tracking-tighter text-white uppercase mb-6">{{ match.away_team.name }}</h3>
+                    <div class="bg-[#0a0a0a] border border-zinc-800 rounded-xl p-2 shadow-inner">
+                        <input type="number" name="away_score" value="{{ match.away_score }}" min="0" 
+                               class="w-32 bg-transparent focus:outline-none text-center text-6xl md:text-7xl font-mono font-black text-white focus:text-emerald-400 transition-colors py-4">
+                    </div>
                 </div>
             </div>
 
-            <div class="pt-4 border-t border-white/5 flex justify-center">
-                <button type="submit" class="bg-indigo-600 hover:bg-indigo-500 font-bold px-8 py-3 rounded-xl shadow-lg transition transform active:scale-98 text-sm cursor-pointer">
-                    💾 Commit Score Modifications
+            <div class="pt-8 border-t border-zinc-800/50 flex justify-center">
+                <button type="submit" class="bg-blue-600/20 border border-blue-500/50 hover:bg-blue-600 hover:text-white text-blue-400 font-black px-12 py-4 rounded-md uppercase tracking-[0.2em] text-xs transition-all cursor-pointer shadow-[0_0_15px_rgba(37,99,235,0.2)]">
+                    Commit Score Modifications
                 </button>
             </div>
         </form>
@@ -53,67 +85,73 @@
 
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
         
-        <div class="bg-white rounded-2xl border border-gray-200 shadow-xs p-6 flex flex-col justify-between">
+        <div class="bg-[#111111] rounded-xl border border-zinc-800/80 shadow-2xl p-8 flex flex-col justify-between opacity-0 animate-fade-in-up delay-200 group hover:border-emerald-500/50 transition-colors">
             <div>
-                <div class="flex items-center space-x-2 border-b border-gray-100 pb-3 mb-4">
-                    <span class="text-xl">⚽</span>
-                    <h3 class="font-bold text-gray-800 text-base">Record New Scoring Event</h3>
+                <div class="flex items-center gap-3 border-b border-zinc-800 pb-4 mb-6">
+                    <div class="w-3 h-3 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]"></div>
+                    <h3 class="font-black text-white text-lg uppercase tracking-wider">Record Scoring Event</h3>
                 </div>
-                <form method="POST" class="space-y-4">
+                <form method="POST" class="space-y-5">
                     {% csrf_token %}
                     <input type="hidden" name="add_goal" value="1">
+                    
                     <div>
-                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Select Scorer Player</label>
-                        <select name="player" class="w-full border border-gray-300 p-2.5 rounded-xl bg-white text-sm focus:border-indigo-500 focus:outline-none font-medium">
+                        <label class="block text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-2">Select Scorer</label>
+                        <select name="player" class="w-full border border-zinc-800 bg-[#0a0a0a] p-3 rounded-md text-zinc-200 text-sm focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/50 focus:outline-none font-medium shadow-inner transition-colors cursor-pointer">
                             {% for player in players %}
                             <option value="{{ player.id }}">{{ player.name }} [{{ player.team.name }}]</option>
                             {% endfor %}
                         </select>
                     </div>
+                    
                     <div>
-                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Timeline Match Minute</label>
+                        <label class="block text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-2">Match Minute</label>
                         <input type="number" name="minute" min="1" max="120" placeholder="e.g. 14" required 
-                               class="w-full border border-gray-300 p-2.5 rounded-xl text-sm focus:border-indigo-500 focus:outline-none font-medium">
+                               class="w-full border border-zinc-800 bg-[#0a0a0a] p-3 rounded-md text-zinc-200 text-sm focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/50 focus:outline-none font-medium shadow-inner transition-colors placeholder-zinc-700">
                     </div>
-                    <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl text-sm transition shadow-sm cursor-pointer">
-                        Add Goal to Match Timeline
+                    
+                    <button type="submit" class="w-full mt-2 bg-emerald-500/10 border border-emerald-500/30 hover:bg-emerald-500 hover:text-zinc-900 text-emerald-400 font-bold py-3 rounded-md text-xs uppercase tracking-widest transition-all cursor-pointer">
+                        Add Goal to Timeline
                     </button>
                 </form>
             </div>
         </div>
 
-        <div class="bg-white rounded-2xl border border-gray-200 shadow-xs p-6 flex flex-col justify-between">
+        <div class="bg-[#111111] rounded-xl border border-zinc-800/80 shadow-2xl p-8 flex flex-col justify-between opacity-0 animate-fade-in-up delay-200 group hover:border-amber-500/50 transition-colors">
             <div>
-                <div class="flex items-center space-x-2 border-b border-gray-100 pb-3 mb-4">
-                    <span class="text-xl">🟨</span>
-                    <h3 class="font-bold text-gray-800 text-base">Record Disciplinary Infraction</h3>
+                <div class="flex items-center gap-3 border-b border-zinc-800 pb-4 mb-6">
+                    <div class="w-3 h-3 rounded-[2px] bg-amber-400 shadow-[0_0_8px_rgba(251,191,36,0.5)] transform -rotate-6"></div>
+                    <h3 class="font-black text-white text-lg uppercase tracking-wider">Record Infraction</h3>
                 </div>
-                <form method="POST" class="space-y-4">
+                <form method="POST" class="space-y-5">
                     {% csrf_token %}
                     <input type="hidden" name="add_card" value="1">
+                    
                     <div>
-                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Select Booked Player</label>
-                        <select name="player" class="w-full border border-gray-300 p-2.5 rounded-xl bg-white text-sm focus:border-indigo-500 focus:outline-none font-medium">
+                        <label class="block text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-2">Select Booked Player</label>
+                        <select name="player" class="w-full border border-zinc-800 bg-[#0a0a0a] p-3 rounded-md text-zinc-200 text-sm focus:border-amber-500 focus:ring-1 focus:ring-amber-500/50 focus:outline-none font-medium shadow-inner transition-colors cursor-pointer">
                             {% for player in players %}
                             <option value="{{ player.id }}">{{ player.name }} [{{ player.team.name }}]</option>
                             {% endfor %}
                         </select>
                     </div>
+                    
                     <div class="grid grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Card Color Type</label>
-                            <select name="card_type" class="w-full border border-gray-300 p-2.5 rounded-xl bg-white text-sm focus:border-indigo-500 focus:outline-none font-semibold">
-                                <option value="Yellow">🟨 Yellow Card</option>
-                                <option value="Red">🟥 Red Card</option>
+                            <label class="block text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-2">Card Type</label>
+                            <select name="card_type" class="w-full border border-zinc-800 bg-[#0a0a0a] p-3 rounded-md text-zinc-200 text-sm focus:border-amber-500 focus:ring-1 focus:ring-amber-500/50 focus:outline-none font-semibold shadow-inner transition-colors cursor-pointer">
+                                <option value="Yellow">Yellow Card</option>
+                                <option value="Red">Red Card</option>
                             </select>
                         </div>
                         <div>
-                            <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Minute</label>
+                            <label class="block text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-2">Minute</label>
                             <input type="number" name="minute" min="1" max="120" placeholder="e.g. 74" required 
-                                   class="w-full border border-gray-300 p-2.5 rounded-xl text-sm focus:border-indigo-500 focus:outline-none font-medium">
+                                   class="w-full border border-zinc-800 bg-[#0a0a0a] p-3 rounded-md text-zinc-200 text-sm focus:border-amber-500 focus:ring-1 focus:ring-amber-500/50 focus:outline-none font-medium shadow-inner transition-colors placeholder-zinc-700">
                         </div>
                     </div>
-                    <button type="submit" class="w-full bg-amber-600 hover:bg-amber-700 text-white font-bold py-2.5 rounded-xl text-sm transition shadow-sm cursor-pointer">
+                    
+                    <button type="submit" class="w-full mt-2 bg-amber-500/10 border border-amber-500/30 hover:bg-amber-500 hover:text-zinc-900 text-amber-400 font-bold py-3 rounded-md text-xs uppercase tracking-widest transition-all cursor-pointer">
                         Issue Formal Card
                     </button>
                 </form>
@@ -123,58 +161,62 @@
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
         
-        <div class="bg-white border border-gray-200 rounded-2xl shadow-xs overflow-hidden">
-            <div class="p-4 bg-gray-50 border-b border-gray-200 font-bold text-gray-700 text-sm flex justify-between items-center">
-                <span>⚽ Logged Goals List</span>
-                <span class="bg-emerald-100 text-emerald-800 text-xs px-2.5 py-0.5 rounded-full font-bold">{{ goals.count }} Scored</span>
+        <div class="bg-black border border-zinc-800 rounded-xl shadow-2xl overflow-hidden opacity-0 animate-fade-in-up delay-300">
+            <div class="px-6 py-4 bg-zinc-900/50 border-b border-zinc-800 font-bold text-zinc-400 text-[10px] uppercase tracking-[0.2em] flex justify-between items-center">
+                <span>Scoring Feed</span>
+                <span class="bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded shadow-sm">{{ goals.count }} Scored</span>
             </div>
-            <ul class="divide-y divide-gray-100 max-h-[300px] overflow-y-auto">
+            <ul class="divide-y divide-zinc-800/50 max-h-[300px] overflow-y-auto">
                 {% for goal in goals %}
-                <li class="p-4 flex items-center justify-between text-sm hover:bg-gray-50 transition">
-                    <div class="flex items-center space-x-3">
-                        <span class="bg-emerald-50 text-emerald-700 font-mono font-bold px-2 py-1 rounded border border-emerald-100 text-xs">{{ goal.minute }}'</span>
-                        <span class="font-semibold text-gray-900">{{ goal.player.name }}</span>
-                        <span class="text-xs text-gray-400">({{ goal.team.name }})</span>
+                <div class="group relative flex items-center justify-between p-4 hover:bg-zinc-900 transition-colors border-l-2 border-transparent hover:border-emerald-500">
+                    <div class="flex items-center space-x-4">
+                        <span class="font-mono font-black text-emerald-400 text-sm w-8 text-right">{{ goal.minute }}'</span>
+                        <div>
+                            <span class="font-bold text-zinc-200 uppercase tracking-wide block leading-tight">{{ goal.player.name }}</span>
+                            <span class="text-[9px] font-bold text-zinc-600 uppercase tracking-widest">{{ goal.team.name }}</span>
+                        </div>
                     </div>
                     <form method="POST" onsubmit="return confirm('Purge this goal item instance permanently?');">
                         {% csrf_token %}
                         <input type="hidden" name="delete_goal" value="1">
                         <input type="hidden" name="goal_id" value="{{ goal.id }}">
-                        <button type="submit" class="text-red-500 hover:text-red-700 hover:bg-red-50 p-1.5 rounded-lg transition text-xs font-bold cursor-pointer">
-                            ❌ Remove
+                        <button type="submit" class="text-[10px] font-bold uppercase tracking-widest text-zinc-600 hover:text-rose-500 transition-colors cursor-pointer bg-zinc-950 px-3 py-1.5 rounded border border-zinc-800 hover:border-rose-500/50">
+                            Remove
                         </button>
                     </form>
-                </li>
+                </div>
                 {% empty %}
-                <li class="p-8 text-center text-gray-400 italic text-sm">No goal events captured on file.</li>
+                <li class="p-10 text-center text-zinc-600 font-medium text-xs uppercase tracking-widest border-dashed border border-zinc-800 m-4 rounded">No scoring events captured.</li>
                 {% endfor %}
             </ul>
         </div>
 
-        <div class="bg-white border border-gray-200 rounded-2xl shadow-xs overflow-hidden">
-            <div class="p-4 bg-gray-50 border-b border-gray-200 font-bold text-gray-700 text-sm flex justify-between items-center">
-                <span>🟨 Live Disciplinary Infractions Feed</span>
-                <span class="bg-amber-100 text-amber-800 text-xs px-2.5 py-0.5 rounded-full font-bold">{{ cards.count }} Booked</span>
+        <div class="bg-black border border-zinc-800 rounded-xl shadow-2xl overflow-hidden opacity-0 animate-fade-in-up delay-300">
+            <div class="px-6 py-4 bg-zinc-900/50 border-b border-zinc-800 font-bold text-zinc-400 text-[10px] uppercase tracking-[0.2em] flex justify-between items-center">
+                <span>Infractions Feed</span>
+                <span class="bg-amber-500/10 border border-amber-500/20 text-amber-400 px-2 py-0.5 rounded shadow-sm">{{ cards.count }} Booked</span>
             </div>
-            <ul class="divide-y divide-gray-100 max-h-[300px] overflow-y-auto">
+            <ul class="divide-y divide-zinc-800/50 max-h-[300px] overflow-y-auto">
                 {% for card in cards %}
-                <li class="p-4 flex items-center justify-between text-sm hover:bg-gray-50 transition">
-                    <div class="flex items-center space-x-3">
-                        <span class="bg-gray-100 text-gray-700 font-mono font-bold px-2 py-1 rounded text-xs">{{ card.minute }}'</span>
-                        <span class="inline-block w-3 h-4 rounded-xs {% if card.card_type == 'Yellow' %}bg-yellow-400{% else %}bg-red-500{% endif %}"></span>
-                        <span class="font-semibold text-gray-900">{{ card.player.name }}</span>
+                <div class="group relative flex items-center justify-between p-4 hover:bg-zinc-900 transition-colors border-l-2 border-transparent {% if card.card_type == 'Yellow' %}hover:border-amber-400{% else %}hover:border-rose-600{% endif %}">
+                    <div class="flex items-center space-x-4">
+                        <span class="font-mono font-black text-zinc-500 text-sm w-8 text-right">{{ card.minute }}'</span>
+                        <div class="w-3 h-4 rounded-[2px] shadow-sm transform -rotate-3 {% if card.card_type == 'Yellow' %}bg-amber-400{% else %}bg-rose-600{% endif %}"></div>
+                        <div>
+                            <span class="font-bold text-zinc-200 uppercase tracking-wide block leading-tight">{{ card.player.name }}</span>
+                        </div>
                     </div>
                     <form method="POST" onsubmit="return confirm('Purge this card item instance permanently?');">
                         {% csrf_token %}
                         <input type="hidden" name="delete_card" value="1">
                         <input type="hidden" name="card_id" value="{{ card.id }}">
-                        <button type="submit" class="text-red-500 hover:text-red-700 hover:bg-red-50 p-1.5 rounded-lg transition text-xs font-bold cursor-pointer">
-                            ❌ Remove
+                        <button type="submit" class="text-[10px] font-bold uppercase tracking-widest text-zinc-600 hover:text-rose-500 transition-colors cursor-pointer bg-zinc-950 px-3 py-1.5 rounded border border-zinc-800 hover:border-rose-500/50">
+                            Remove
                         </button>
                     </form>
-                </li>
+                </div>
                 {% empty %}
-                <li class="p-8 text-center text-gray-400 italic text-sm">No card infractions logged.</li>
+                <li class="p-10 text-center text-zinc-600 font-medium text-xs uppercase tracking-widest border-dashed border border-zinc-800 m-4 rounded">No disciplinary events captured.</li>
                 {% endfor %}
             </ul>
         </div>
