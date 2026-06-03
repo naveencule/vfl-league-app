@@ -1,0 +1,343 @@
+
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font-sans); }
+
+  .admin-wrap { padding: 1.5rem 0; }
+
+  .header-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 1.25rem;
+    border-bottom: 0.5px solid var(--color-border-tertiary);
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .header-left { display: flex; align-items: center; gap: 14px; }
+  .header-icon {
+    width: 48px; height: 48px;
+    background: #E6F1FB;
+    border-radius: var(--border-radius-lg);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .header-icon i { font-size: 24px; color: #185FA5; }
+  .header-title { font-size: 22px; font-weight: 500; color: var(--color-text-primary); line-height: 1.2; }
+  .header-sub { font-size: 13px; color: var(--color-text-secondary); margin-top: 3px; }
+  .logout-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: #FCEBEB;
+    color: #A32D2D;
+    border: 0.5px solid #F7C1C1;
+    border-radius: var(--border-radius-md);
+    font-size: 13px; font-weight: 500;
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: background 0.15s;
+    text-decoration: none;
+  }
+  .logout-btn:hover { background: #F7C1C1; }
+
+  .stat-strip {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 10px;
+    margin-bottom: 2rem;
+  }
+  .stat-card {
+    background: var(--color-background-secondary);
+    border-radius: var(--border-radius-md);
+    padding: 1rem;
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .stat-card .stat-icon { font-size: 18px; color: var(--color-text-secondary); }
+  .stat-card .stat-val { font-size: 24px; font-weight: 500; color: var(--color-text-primary); }
+  .stat-card .stat-label { font-size: 12px; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: 0.04em; }
+
+  .forms-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 14px;
+    margin-bottom: 2rem;
+  }
+  .form-card {
+    background: var(--color-background-primary);
+    border: 0.5px solid var(--color-border-tertiary);
+    border-radius: var(--border-radius-lg);
+    overflow: hidden;
+  }
+  .form-card-header {
+    padding: 12px 16px;
+    display: flex; align-items: center; gap: 10px;
+    border-bottom: 0.5px solid var(--color-border-tertiary);
+  }
+  .form-card-header .fh-icon {
+    width: 32px; height: 32px;
+    border-radius: var(--border-radius-md);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .fh-icon i { font-size: 16px; }
+  .fh-blue { background: #E6F1FB; } .fh-blue i { color: #185FA5; }
+  .fh-green { background: #EAF3DE; } .fh-green i { color: #3B6D11; }
+  .fh-purple { background: #EEEDFE; } .fh-purple i { color: #534AB7; }
+
+  .form-card-header h3 { font-size: 14px; font-weight: 500; color: var(--color-text-primary); }
+  .form-card-body { padding: 14px 16px; }
+  .field-group { margin-bottom: 12px; }
+  .field-group label { display: block; font-size: 11px; font-weight: 500; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 5px; }
+  .field-group input,
+  .field-group select {
+    width: 100%; font-size: 13px;
+    border: 0.5px solid var(--color-border-secondary);
+    border-radius: var(--border-radius-md);
+    padding: 7px 10px;
+    background: var(--color-background-secondary);
+    color: var(--color-text-primary);
+  }
+  .field-group input:focus,
+  .field-group select:focus { outline: none; border-color: #378ADD; }
+
+  .submit-btn {
+    width: 100%; padding: 9px;
+    border: none; border-radius: var(--border-radius-md);
+    font-size: 13px; font-weight: 500;
+    cursor: pointer; transition: opacity 0.15s;
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+  }
+  .submit-btn:hover { opacity: 0.85; }
+  .btn-blue { background: #185FA5; color: #fff; }
+  .btn-green { background: #3B6D11; color: #fff; }
+  .btn-purple { background: #534AB7; color: #fff; }
+
+  .matches-panel {
+    background: var(--color-background-primary);
+    border: 0.5px solid var(--color-border-tertiary);
+    border-radius: var(--border-radius-lg);
+    overflow: hidden;
+  }
+  .matches-panel-header {
+    padding: 14px 18px;
+    background: var(--color-background-secondary);
+    border-bottom: 0.5px solid var(--color-border-tertiary);
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 8px;
+  }
+  .matches-panel-header h2 { font-size: 15px; font-weight: 500; color: var(--color-text-primary); display: flex; align-items: center; gap: 8px; }
+  .live-pill {
+    display: inline-flex; align-items: center; gap: 5px;
+    background: #FCEBEB; color: #A32D2D;
+    border: 0.5px solid #F7C1C1;
+    border-radius: 99px;
+    font-size: 11px; font-weight: 500;
+    padding: 3px 10px;
+  }
+  .live-dot { width: 6px; height: 6px; background: #E24B4A; border-radius: 50%; animation: pulse 1.2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+  .match-row {
+    padding: 14px 18px;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 12px; flex-wrap: wrap;
+    border-bottom: 0.5px solid var(--color-border-tertiary);
+    transition: background 0.12s;
+  }
+  .match-row:last-child { border-bottom: none; }
+  .match-row:hover { background: var(--color-background-secondary); }
+
+  .match-left { display: flex; align-items: center; gap: 14px; }
+  .status-pill {
+    font-size: 11px; font-weight: 500;
+    padding: 3px 10px; border-radius: 99px;
+    white-space: nowrap;
+  }
+  .pill-played { background: #D3D1C7; color: #444441; }
+  .pill-upcoming { background: #EAF3DE; color: #3B6D11; }
+  .pill-live { background: #FCEBEB; color: #A32D2D; }
+
+  .match-teams { display: flex; align-items: center; gap: 10px; }
+  .team-name { font-size: 14px; font-weight: 500; color: var(--color-text-primary); }
+  .match-score {
+    font-size: 15px; font-weight: 500; color: var(--color-text-secondary);
+    padding: 2px 10px;
+    background: var(--color-background-secondary);
+    border-radius: var(--border-radius-md);
+  }
+  .match-vs { font-size: 12px; color: var(--color-text-tertiary); }
+  .match-date { font-size: 12px; color: var(--color-text-secondary); margin-top: 4px; display: block; }
+
+  .manage-btn {
+    display: inline-flex; align-items: center; gap: 5px;
+    background: #EEEDFE; color: #534AB7;
+    border: 0.5px solid #CEC BF6;
+    border-radius: var(--border-radius-md);
+    font-size: 12px; font-weight: 500;
+    padding: 7px 13px; white-space: nowrap;
+    cursor: pointer; transition: background 0.12s;
+    text-decoration: none;
+  }
+  .manage-btn:hover { background: #CECBF6; }
+
+  .empty-state {
+    padding: 3rem; text-align: center;
+    color: var(--color-text-secondary);
+  }
+  .empty-state i { font-size: 32px; display: block; margin-bottom: 10px; opacity: 0.4; }
+
+  .section-divider {
+    display: flex; align-items: center; gap: 10px;
+    margin: 0 0 1rem;
+  }
+  .section-divider h2 { font-size: 14px; font-weight: 500; color: var(--color-text-secondary); white-space: nowrap; text-transform: uppercase; letter-spacing: 0.05em; }
+  .section-divider::before, .section-divider::after { content: ''; flex: 1; height: 0.5px; background: var(--color-border-tertiary); }
+</style>
+
+<div class="admin-wrap">
+  <h2 class="sr-only">System admin control center for managing teams, players, matches, and live scoring.</h2>
+
+  <div class="header-bar">
+    <div class="header-left">
+      <div class="header-icon" aria-hidden="true"><i class="ti ti-trophy"></i></div>
+      <div>
+        <div class="header-title">Admin control center</div>
+        <div class="header-sub">Register entities and manage live match events</div>
+      </div>
+    </div>
+    <a href="#" class="logout-btn"><i class="ti ti-lock" aria-hidden="true"></i> Logout session</a>
+  </div>
+
+  <div class="stat-strip">
+    <div class="stat-card">
+      <i class="ti ti-shield stat-icon" aria-hidden="true"></i>
+      <div class="stat-val">—</div>
+      <div class="stat-label">Teams registered</div>
+    </div>
+    <div class="stat-card">
+      <i class="ti ti-run stat-icon" aria-hidden="true"></i>
+      <div class="stat-val">—</div>
+      <div class="stat-label">Players enlisted</div>
+    </div>
+    <div class="stat-card">
+      <i class="ti ti-calendar-event stat-icon" aria-hidden="true"></i>
+      <div class="stat-val">—</div>
+      <div class="stat-label">Fixtures scheduled</div>
+    </div>
+    <div class="stat-card">
+      <i class="ti ti-activity stat-icon" aria-hidden="true"></i>
+      <div class="stat-val">—</div>
+      <div class="stat-label">Matches played</div>
+    </div>
+  </div>
+
+  <div class="section-divider"><h2>Register new entities</h2></div>
+
+  <div class="forms-grid">
+    <div class="form-card">
+      <div class="form-card-header">
+        <div class="fh-icon fh-blue"><i class="ti ti-shield" aria-hidden="true"></i></div>
+        <h3>Register new team</h3>
+      </div>
+      <div class="form-card-body">
+        <div class="field-group"><label>Team name</label><input type="text" placeholder="e.g. FC Phoenix"></div>
+        <div class="field-group"><label>Home ground</label><input type="text" placeholder="Stadium name"></div>
+        <div class="field-group"><label>Kit color</label><input type="text" placeholder="e.g. Red & White"></div>
+        <button class="submit-btn btn-blue"><i class="ti ti-device-floppy" aria-hidden="true"></i> Save team info</button>
+      </div>
+    </div>
+
+    <div class="form-card">
+      <div class="form-card-header">
+        <div class="fh-icon fh-green"><i class="ti ti-run" aria-hidden="true"></i></div>
+        <h3>Enlist player profile</h3>
+      </div>
+      <div class="form-card-body">
+        <div class="field-group"><label>Full name</label><input type="text" placeholder="Player full name"></div>
+        <div class="field-group"><label>Position</label>
+          <select>
+            <option>Select position</option>
+            <option>Goalkeeper</option>
+            <option>Defender</option>
+            <option>Midfielder</option>
+            <option>Forward</option>
+          </select>
+        </div>
+        <div class="field-group"><label>Jersey number</label><input type="number" placeholder="e.g. 10"></div>
+        <button class="submit-btn btn-green"><i class="ti ti-user-plus" aria-hidden="true"></i> Register player</button>
+      </div>
+    </div>
+
+    <div class="form-card">
+      <div class="form-card-header">
+        <div class="fh-icon fh-purple"><i class="ti ti-calendar-plus" aria-hidden="true"></i></div>
+        <h3>Schedule new match</h3>
+      </div>
+      <div class="form-card-body">
+        <div class="field-group"><label>Home team</label>
+          <select><option>Select home team</option></select>
+        </div>
+        <div class="field-group"><label>Away team</label>
+          <select><option>Select away team</option></select>
+        </div>
+        <div class="field-group"><label>Match date & time</label><input type="text" placeholder="e.g. Jun 10, 2026 15:00"></div>
+        <button class="submit-btn btn-purple"><i class="ti ti-plus" aria-hidden="true"></i> Generate fixture</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-divider"><h2>Match schedule & live record engine</h2></div>
+
+  <div class="matches-panel">
+    <div class="matches-panel-header">
+      <h2><i class="ti ti-calendar-stats" aria-hidden="true"></i> Upcoming & recent fixtures</h2>
+      <span class="live-pill"><span class="live-dot"></span> Live engine active</span>
+    </div>
+
+    <div class="match-row">
+      <div class="match-left">
+        <span class="status-pill pill-played">Played</span>
+        <div>
+          <div class="match-teams">
+            <span class="team-name">FC Phoenix</span>
+            <span class="match-score">2 – 1</span>
+            <span class="team-name">Blue Eagles</span>
+          </div>
+          <span class="match-date"><i class="ti ti-clock" style="font-size:12px;vertical-align:-1px" aria-hidden="true"></i> Jun 01, 2026 15:00</span>
+        </div>
+      </div>
+      <a href="#" class="manage-btn"><i class="ti ti-adjustments-horizontal" aria-hidden="true"></i> Manage events</a>
+    </div>
+
+    <div class="match-row">
+      <div class="match-left">
+        <span class="status-pill pill-live">Live</span>
+        <div>
+          <div class="match-teams">
+            <span class="team-name">Red Lions</span>
+            <span class="match-vs">vs</span>
+            <span class="team-name">City Wolves</span>
+          </div>
+          <span class="match-date"><i class="ti ti-clock" style="font-size:12px;vertical-align:-1px" aria-hidden="true"></i> Jun 03, 2026 18:30</span>
+        </div>
+      </div>
+      <a href="#" class="manage-btn"><i class="ti ti-adjustments-horizontal" aria-hidden="true"></i> Manage events</a>
+    </div>
+
+    <div class="match-row">
+      <div class="match-left">
+        <span class="status-pill pill-upcoming">Upcoming</span>
+        <div>
+          <div class="match-teams">
+            <span class="team-name">Storm FC</span>
+            <span class="match-vs">vs</span>
+            <span class="team-name">Golden Hawks</span>
+          </div>
+          <span class="match-date"><i class="ti ti-clock" style="font-size:12px;vertical-align:-1px" aria-hidden="true"></i> Jun 07, 2026 17:00</span>
+        </div>
+      </div>
+      <a href="#" class="manage-btn"><i class="ti ti-adjustments-horizontal" aria-hidden="true"></i> Manage events</a>
+    </div>
+
+  </div>
+</div>
