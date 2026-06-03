@@ -21,19 +21,19 @@
 <body class="bg-[#0a0a0a] text-zinc-300 min-h-screen flex flex-col selection:bg-emerald-500/30 selection:text-white">
 
     <!-- Premium Production-Level Header -->
-    <nav class="bg-[#0a0a0a]/80 text-zinc-100 border-b border-zinc-800/80 sticky top-0 z-50 backdrop-blur-xl shadow-sm">
+    <nav class="bg-[#0a0a0a]/90 text-zinc-100 border-b border-zinc-800/80 sticky top-0 z-50 backdrop-blur-xl shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 
                 <!-- Brand / Logo -->
-                <div class="flex items-center transform transition duration-300 hover:scale-105">
+                <div class="flex items-center transform transition duration-300 hover:scale-105 z-50">
                     <span class="text-lg font-black tracking-widest uppercase text-white">
                         VFL<span class="text-emerald-400">2026</span>
                     </span>
                 </div>
                 
-                <!-- Navigation Links -->
-                <div class="flex items-center space-x-1 text-sm font-semibold tracking-wide">
+                <!-- Desktop Navigation Links (Hidden on Mobile) -->
+                <div class="hidden lg:flex items-center space-x-1 text-sm font-semibold tracking-wide">
                     <a href="{% url 'standings' %}" class="text-zinc-400 hover:text-emerald-400 hover:bg-zinc-800/50 px-3 py-2 rounded-md transition duration-300">Standings</a>
                     <a href="{% url 'top_scorers' %}" class="text-zinc-400 hover:text-emerald-400 hover:bg-zinc-800/50 px-3 py-2 rounded-md transition duration-300">Top Scorers</a>
                     <a href="{% url 'clean_sheets' %}" class="text-zinc-400 hover:text-emerald-400 hover:bg-zinc-800/50 px-3 py-2 rounded-md transition duration-300">Clean Sheets</a>
@@ -41,12 +41,38 @@
                     
                     <!-- Staff / Administration Portal Links -->
                     {% if user.is_staff %}
-                    <div class="h-5 w-[1px] bg-zinc-700 mx-2 hidden sm:block"></div>
+                    <div class="h-5 w-[1px] bg-zinc-700 mx-2"></div>
                     <a href="{% url 'admin_dashboard' %}" class="text-emerald-400 hover:text-emerald-300 hover:bg-emerald-500/10 px-3 py-2 rounded-md transition duration-300 font-medium bg-emerald-500/5 border border-emerald-500/20">Schedules</a>
                     <a href="{% url 'manage_rosters' %}" class="text-emerald-400 hover:text-emerald-300 hover:bg-emerald-500/10 px-3 py-2 rounded-md transition duration-300 font-medium bg-emerald-500/5 border border-emerald-500/20">Manage Rosters</a>
                     {% endif %}
                 </div>
 
+                <!-- Mobile Menu Button (Visible on Mobile) -->
+                <div class="lg:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-zinc-400 hover:text-emerald-400 focus:outline-none p-2 transition-colors">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path id="menu-icon-path" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+                        </svg>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Mobile Navigation Panel (Hidden by default) -->
+        <div id="mobile-menu" class="hidden lg:hidden bg-[#0a0a0a] border-t border-zinc-800/80 absolute w-full left-0 top-16 shadow-2xl">
+            <div class="px-4 pt-2 pb-6 space-y-2 flex flex-col font-semibold tracking-wide text-sm">
+                <a href="{% url 'standings' %}" class="text-zinc-400 hover:text-emerald-400 hover:bg-zinc-800/50 block px-4 py-3 rounded-md transition duration-300">Standings</a>
+                <a href="{% url 'top_scorers' %}" class="text-zinc-400 hover:text-emerald-400 hover:bg-zinc-800/50 block px-4 py-3 rounded-md transition duration-300">Top Scorers</a>
+                <a href="{% url 'clean_sheets' %}" class="text-zinc-400 hover:text-emerald-400 hover:bg-zinc-800/50 block px-4 py-3 rounded-md transition duration-300">Clean Sheets</a>
+                <a href="{% url 'disciplinary_board' %}" class="text-zinc-400 hover:text-emerald-400 hover:bg-zinc-800/50 block px-4 py-3 rounded-md transition duration-300">Discipline Radar</a>
+                
+                <!-- Staff / Administration Portal Links -->
+                {% if user.is_staff %}
+                <div class="h-[1px] w-full bg-zinc-800 my-2"></div>
+                <a href="{% url 'admin_dashboard' %}" class="text-emerald-400 hover:text-emerald-300 bg-emerald-500/5 border border-emerald-500/20 block px-4 py-3 rounded-md transition duration-300">Schedules</a>
+                <a href="{% url 'manage_rosters' %}" class="text-emerald-400 hover:text-emerald-300 bg-emerald-500/5 border border-emerald-500/20 block px-4 py-3 rounded-md transition duration-300">Manage Rosters</a>
+                {% endif %}
             </div>
         </div>
     </nav>
@@ -61,5 +87,25 @@
         &copy; VFL 2026. All rights reserved. Crafted with passion by the VFL Development Team. 
     </footer>
 
+    <!-- Mobile Menu Script -->
+    <script>
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const menuIconPath = document.getElementById('menu-icon-path');
+        let isMenuOpen = false;
+
+        mobileMenuBtn.addEventListener('click', () => {
+            isMenuOpen = !isMenuOpen;
+            if (isMenuOpen) {
+                mobileMenu.classList.remove('hidden');
+                // Change to 'X' icon
+                menuIconPath.setAttribute('d', 'M6 18L18 6M6 6l12 12');
+            } else {
+                mobileMenu.classList.add('hidden');
+                // Change back to hamburger icon
+                menuIconPath.setAttribute('d', 'M4 6h16M4 12h16m-7 6h7');
+            }
+        });
+    </script>
 </body>
 </html>

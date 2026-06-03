@@ -1,18 +1,18 @@
 {% extends 'league/base.html' %}
 
 {% block content %}
-<div class="max-w-6xl mx-auto space-y-16">
+<div class="max-w-6xl mx-auto space-y-10 sm:space-y-16">
     
     <!-- League Standings Section -->
     <div class="opacity-0 animate-fade-in-up">
         
         <!-- Broadcast Style Header -->
-        <div class="border-b-2 border-zinc-800 pb-4 mb-6 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+        <div class="border-b-2 border-zinc-800 pb-4 mb-4 sm:mb-6 flex flex-col sm:flex-row sm:items-end justify-between gap-2 sm:gap-4">
             <div>
-                <h2 class="text-3xl md:text-4xl font-black text-white uppercase tracking-tighter">
+                <h2 class="text-2xl sm:text-3xl md:text-4xl font-black text-white uppercase tracking-tighter">
                     League Table
                 </h2>
-                <p class="text-zinc-500 text-xs font-bold uppercase tracking-[0.2em] mt-1">
+                <p class="text-zinc-500 text-[10px] sm:text-xs font-bold uppercase tracking-[0.2em] mt-1">
                     Current Standings &bull; VFL Campaign
                 </p>
             </div>
@@ -22,20 +22,20 @@
         </div>
         
         <!-- Minimalist Table Container -->
-        <div class="bg-[#111111] border border-zinc-800/60 overflow-x-auto shadow-2xl">
-            <table class="w-full text-left text-sm border-collapse whitespace-nowrap">
+        <div class="bg-[#111111] border border-zinc-800/60 overflow-x-auto shadow-2xl touch-pan-x">
+            <table class="w-full text-left text-xs sm:text-sm border-collapse whitespace-nowrap min-w-[600px]">
                 <thead>
-                    <tr class="bg-black/60 border-b border-zinc-800 text-zinc-500 font-bold uppercase text-[10px] tracking-[0.15em]">
-                        <th class="p-4 pl-6">Pos</th>
-                        <th class="p-4">Club</th>
-                        <th class="p-4 text-center">MP</th>
-                        <th class="p-4 text-center">W</th>
-                        <th class="p-4 text-center">D</th>
-                        <th class="p-4 text-center">L</th>
-                        <th class="p-4 text-center">GF</th>
-                        <th class="p-4 text-center">GA</th>
-                        <th class="p-4 text-center">GD</th>
-                        <th class="p-4 pr-6 text-center text-white">Pts</th>
+                    <tr class="bg-black/60 border-b border-zinc-800 text-zinc-500 font-bold uppercase text-[9px] sm:text-[10px] tracking-[0.15em]">
+                        <th class="p-3 sm:p-4 pl-4 sm:pl-6">Pos</th>
+                        <th class="p-3 sm:p-4">Club</th>
+                        <th class="p-3 sm:p-4 text-center">MP</th>
+                        <th class="p-3 sm:p-4 text-center">W</th>
+                        <th class="p-3 sm:p-4 text-center">D</th>
+                        <th class="p-3 sm:p-4 text-center">L</th>
+                        <th class="p-3 sm:p-4 text-center">GF</th>
+                        <th class="p-3 sm:p-4 text-center">GA</th>
+                        <th class="p-3 sm:p-4 text-center">GD</th>
+                        <th class="p-3 sm:p-4 pr-4 sm:pr-6 text-center text-white">Pts</th>
                     </tr>
                 </thead>
                 <tbody class="font-medium text-zinc-400">
@@ -43,31 +43,31 @@
                     <tr class="group border-b border-zinc-800/40 last:border-0 hover:bg-[#1a1a1a] transition-colors duration-200 cursor-default">
                         
                         <!-- Rank with dynamic border accent -->
-                        <td class="p-4 pl-6 font-mono font-bold text-zinc-500 border-l-2 border-transparent group-hover:border-emerald-500 transition-colors">
+                        <td class="p-3 sm:p-4 pl-4 sm:pl-6 font-mono font-bold text-zinc-500 border-l-2 border-transparent group-hover:border-emerald-500 transition-colors">
                             <span class="{% if forloop.counter <= 3 %}text-zinc-300{% endif %}">
                                 0{{ forloop.counter }}
                             </span>
                         </td>
                         
                         <!-- Team Name -->
-                        <td class="p-4 font-bold text-zinc-200 uppercase tracking-wide group-hover:text-white transition-colors">
+                        <td class="p-3 sm:p-4 font-bold text-zinc-200 uppercase tracking-wide group-hover:text-white transition-colors">
                             {{ row.team.name }}
                         </td>
                         
-                        <td class="p-4 text-center text-zinc-500">{{ row.mp }}</td>
-                        <td class="p-4 text-center text-zinc-400">{{ row.w }}</td>
-                        <td class="p-4 text-center text-zinc-500">{{ row.d }}</td>
-                        <td class="p-4 text-center text-zinc-600">{{ row.l }}</td>
-                        <td class="p-4 text-center">{{ row.gf }}</td>
-                        <td class="p-4 text-center">{{ row.ga }}</td>
+                        <td class="p-3 sm:p-4 text-center text-zinc-500">{{ row.mp }}</td>
+                        <td class="p-3 sm:p-4 text-center text-zinc-400">{{ row.w }}</td>
+                        <td class="p-3 sm:p-4 text-center text-zinc-500">{{ row.d }}</td>
+                        <td class="p-3 sm:p-4 text-center text-zinc-600">{{ row.l }}</td>
+                        <td class="p-3 sm:p-4 text-center">{{ row.gf }}</td>
+                        <td class="p-3 sm:p-4 text-center">{{ row.ga }}</td>
                         
                         <!-- Goal Difference -->
-                        <td class="p-4 text-center font-bold font-mono text-[13px] {% if row.gd >= 0 %}text-zinc-300{% else %}text-zinc-600{% endif %}">
+                        <td class="p-3 sm:p-4 text-center font-bold font-mono text-xs sm:text-[13px] {% if row.gd >= 0 %}text-zinc-300{% else %}text-zinc-600{% endif %}">
                             {% if row.gd > 0 %}+{% endif %}{{ row.gd }}
                         </td>
                         
                         <!-- Points -->
-                        <td class="p-4 pr-6 text-center font-black text-white text-base bg-gradient-to-l from-[#0a0a0a] to-transparent group-hover:text-emerald-400 transition-colors">
+                        <td class="p-3 sm:p-4 pr-4 sm:pr-6 text-center font-black text-white text-sm sm:text-base bg-gradient-to-l from-[#0a0a0a] to-transparent group-hover:text-emerald-400 transition-colors">
                             {{ row.pts }}
                         </td>
                     </tr>
@@ -78,45 +78,45 @@
     </div>
 
     <!-- Fixtures and Results Grid -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10">
         
         <!-- Upcoming Games -->
         <div class="opacity-0 animate-fade-in-up delay-100 flex flex-col">
             
-            <div class="border-b-2 border-zinc-800 pb-4 mb-6 flex justify-between items-end">
-                <h3 class="text-2xl font-black text-white uppercase tracking-tighter">
+            <div class="border-b-2 border-zinc-800 pb-3 sm:pb-4 mb-4 sm:mb-6 flex justify-between items-end">
+                <h3 class="text-xl sm:text-2xl font-black text-white uppercase tracking-tighter">
                     Fixtures
                 </h3>
-                <span class="text-[10px] text-emerald-500 font-bold uppercase tracking-[0.2em]">Scheduled</span>
+                <span class="text-[9px] sm:text-[10px] text-emerald-500 font-bold uppercase tracking-[0.2em]">Scheduled</span>
             </div>
             
             <div class="space-y-2 flex-grow">
                 {% for match in upcoming_matches %}
-                <div class="bg-[#111111] border border-zinc-800/60 p-5 hover:border-zinc-600 hover:bg-[#151515] transition-all duration-300 group flex justify-between items-center relative overflow-hidden">
+                <div class="bg-[#111111] border border-zinc-800/60 p-4 sm:p-5 hover:border-zinc-600 hover:bg-[#151515] transition-all duration-300 group flex justify-between items-center relative overflow-hidden">
                     
-                    <div class="flex flex-col gap-1.5 z-10">
-                        <div class="text-base sm:text-lg font-bold text-zinc-300 uppercase tracking-wide group-hover:text-white transition-colors">
+                    <div class="flex flex-col gap-1 z-10 pr-2">
+                        <div class="text-sm sm:text-base md:text-lg font-bold text-zinc-300 uppercase tracking-wide group-hover:text-white transition-colors leading-tight">
                             {{ match.home_team.name }} 
-                            <span class="text-zinc-700 font-normal mx-1.5 text-sm">v</span> 
+                            <span class="text-zinc-700 font-normal mx-1 sm:mx-1.5 text-xs sm:text-sm">v</span> 
                             {{ match.away_team.name }}
                         </div>
-                        <div class="text-[10px] text-zinc-500 uppercase tracking-widest font-semibold flex items-center gap-2">
-                            <span class="w-1 h-1 bg-zinc-700 rounded-full"></span>
-                            {{ match.home_team.home_ground }}
+                        <div class="text-[9px] sm:text-[10px] text-zinc-500 uppercase tracking-widest font-semibold flex items-center gap-1.5 sm:gap-2 mt-0.5">
+                            <span class="w-1 h-1 bg-zinc-700 rounded-full flex-shrink-0"></span>
+                            <span class="truncate">{{ match.home_team.home_ground }}</span>
                         </div>
                     </div>
                     
-                    <div class="text-right z-10 pl-4 border-l border-zinc-800">
-                        <div class="text-sm font-black text-white uppercase tracking-wider">{{ match.match_date|date:"M d" }}</div>
-                        <div class="text-[10px] font-bold text-zinc-500 mt-1 uppercase tracking-widest">{{ match.match_date|date:"H:i" }}</div>
+                    <div class="text-right z-10 pl-3 sm:pl-4 border-l border-zinc-800 flex-shrink-0">
+                        <div class="text-xs sm:text-sm font-black text-white uppercase tracking-wider">{{ match.match_date|date:"M d" }}</div>
+                        <div class="text-[9px] sm:text-[10px] font-bold text-zinc-500 mt-0.5 sm:mt-1 uppercase tracking-widest">{{ match.match_date|date:"H:i" }}</div>
                     </div>
                     
                     <!-- Subtle Hover Accent Line -->
                     <div class="absolute top-0 right-0 h-full w-1 bg-zinc-800 group-hover:bg-emerald-500 transition-colors"></div>
                 </div>
                 {% empty %}
-                <div class="p-12 text-center border border-zinc-800 border-dashed bg-[#111111]/50 h-full flex flex-col justify-center">
-                    <p class="text-zinc-600 font-bold text-xs uppercase tracking-widest">No scheduled fixtures</p>
+                <div class="p-8 sm:p-12 text-center border border-zinc-800 border-dashed bg-[#111111]/50 h-full flex flex-col justify-center">
+                    <p class="text-zinc-600 font-bold text-[10px] sm:text-xs uppercase tracking-widest">No scheduled fixtures</p>
                 </div>
                 {% endfor %}
             </div>
@@ -125,33 +125,33 @@
         <!-- Match Results -->
         <div class="opacity-0 animate-fade-in-up delay-200 flex flex-col">
             
-            <div class="border-b-2 border-zinc-800 pb-4 mb-6 flex justify-between items-end">
-                <h3 class="text-2xl font-black text-white uppercase tracking-tighter">
+            <div class="border-b-2 border-zinc-800 pb-3 sm:pb-4 mb-4 sm:mb-6 flex justify-between items-end">
+                <h3 class="text-xl sm:text-2xl font-black text-white uppercase tracking-tighter">
                     Results
                 </h3>
-                <span class="text-[10px] text-zinc-500 font-bold uppercase tracking-[0.2em]">Completed</span>
+                <span class="text-[9px] sm:text-[10px] text-zinc-500 font-bold uppercase tracking-[0.2em]">Completed</span>
             </div>
             
             <div class="space-y-2 flex-grow">
                 {% for match in match_results %}
-                <div class="bg-[#111111] border border-zinc-800/60 p-5 hover:border-zinc-600 hover:bg-[#151515] transition-all duration-300 group relative overflow-hidden flex flex-col justify-center">
+                <div class="bg-[#111111] border border-zinc-800/60 p-4 sm:p-5 hover:border-zinc-600 hover:bg-[#151515] transition-all duration-300 group relative overflow-hidden flex flex-col justify-center">
                     
-                    <div class="flex items-center justify-between w-full z-10 mb-2">
+                    <div class="flex items-center justify-between w-full z-10 mb-2 sm:mb-2.5">
                         
                         <!-- Home Team -->
-                        <div class="flex-1 text-right text-sm sm:text-base uppercase tracking-wide font-bold transition-colors {% if match.home_score < match.away_score %}text-zinc-600{% else %}text-zinc-200 group-hover:text-white{% endif %}">
+                        <div class="flex-1 text-right text-xs sm:text-sm md:text-base uppercase tracking-wide font-bold transition-colors leading-tight {% if match.home_score < match.away_score %}text-zinc-600{% else %}text-zinc-200 group-hover:text-white{% endif %}">
                             {{ match.home_team.name }}
                         </div>
                         
                         <!-- Center Score Box -->
-                        <div class="px-5 flex-shrink-0">
-                            <span class="font-mono text-lg font-black text-white tracking-tighter bg-black px-3 py-1.5 border border-zinc-800 shadow-inner group-hover:border-zinc-600 transition-colors block text-center min-w-[70px]">
+                        <div class="px-3 sm:px-5 flex-shrink-0">
+                            <span class="font-mono text-base sm:text-lg font-black text-white tracking-tighter bg-black px-2 sm:px-3 py-1 sm:py-1.5 border border-zinc-800 shadow-inner group-hover:border-zinc-600 transition-colors block text-center min-w-[60px] sm:min-w-[70px]">
                                 {{ match.home_score }} - {{ match.away_score }}
                             </span>
                         </div>
                         
                         <!-- Away Team -->
-                        <div class="flex-1 text-left text-sm sm:text-base uppercase tracking-wide font-bold transition-colors {% if match.away_score < match.home_score %}text-zinc-600{% else %}text-zinc-200 group-hover:text-white{% endif %}">
+                        <div class="flex-1 text-left text-xs sm:text-sm md:text-base uppercase tracking-wide font-bold transition-colors leading-tight {% if match.away_score < match.home_score %}text-zinc-600{% else %}text-zinc-200 group-hover:text-white{% endif %}">
                             {{ match.away_team.name }}
                         </div>
                         
@@ -159,7 +159,7 @@
                     
                     <!-- Date Footer -->
                     <div class="w-full text-center z-10">
-                        <span class="text-[9px] text-zinc-600 uppercase tracking-[0.2em] font-bold">
+                        <span class="text-[8px] sm:text-[9px] text-zinc-600 uppercase tracking-[0.2em] font-bold">
                             FT &bull; {{ match.match_date|date:"d M Y" }}
                         </span>
                     </div>
@@ -168,8 +168,8 @@
                     <div class="absolute top-0 right-0 h-full w-1 bg-zinc-800 group-hover:bg-zinc-500 transition-colors"></div>
                 </div>
                 {% empty %}
-                <div class="p-12 text-center border border-zinc-800 border-dashed bg-[#111111]/50 h-full flex flex-col justify-center">
-                    <p class="text-zinc-600 font-bold text-xs uppercase tracking-widest">No results recorded</p>
+                <div class="p-8 sm:p-12 text-center border border-zinc-800 border-dashed bg-[#111111]/50 h-full flex flex-col justify-center">
+                    <p class="text-zinc-600 font-bold text-[10px] sm:text-xs uppercase tracking-widest">No results recorded</p>
                 </div>
                 {% endfor %}
             </div>

@@ -4,20 +4,20 @@
 <div class="max-w-4xl mx-auto">
     
     <!-- Minimalist Broadcast-Style Header -->
-    <div class="mb-8 border-b border-zinc-800 pb-6 opacity-0 animate-fade-in-up">
+    <div class="mb-6 sm:mb-8 border-b border-zinc-800 pb-4 sm:pb-6 opacity-0 animate-fade-in-up">
         <h1 class="text-3xl md:text-5xl font-black text-white uppercase tracking-tighter">
             Golden Boot
         </h1>
-        <p class="text-zinc-500 font-medium mt-2 text-sm uppercase tracking-[0.15em]">
+        <p class="text-zinc-500 font-medium mt-1 sm:mt-2 text-[10px] sm:text-sm uppercase tracking-[0.15em]">
             Current Campaign &bull; Top Scorers
         </p>
     </div>
 
     <!-- Column Headers -->
-    <div class="flex text-[10px] font-bold text-zinc-500 uppercase tracking-[0.2em] mb-2 px-2 opacity-0 animate-fade-in-up delay-100">
-        <div class="w-16 text-center">Rank</div>
-        <div class="flex-1 pl-4">Player</div>
-        <div class="w-24 text-right pr-4">Goals</div>
+    <div class="flex text-[9px] sm:text-[10px] font-bold text-zinc-500 uppercase tracking-[0.2em] mb-2 px-2 opacity-0 animate-fade-in-up delay-100">
+        <div class="w-12 sm:w-16 text-center flex-shrink-0">Rank</div>
+        <div class="flex-1 pl-3 sm:pl-4">Player</div>
+        <div class="w-16 sm:w-24 text-right pr-3 sm:pr-4 flex-shrink-0">Goals</div>
     </div>
 
     <!-- Leaderboard Stack -->
@@ -25,9 +25,8 @@
         {% for player in scorers %}
         <!-- 
           Staggered animation delay using forloop.counter so they load sequentially.
-          The max delay is clamped by just keeping the inline style simple.
         -->
-        <div class="group relative bg-[#111111] hover:bg-[#1a1a1a] transition-all duration-300 flex items-stretch min-h-[80px] opacity-0 animate-fade-in-up border-l-2 
+        <div class="group relative bg-[#111111] hover:bg-[#1a1a1a] transition-all duration-300 flex items-stretch min-h-[64px] sm:min-h-[80px] opacity-0 animate-fade-in-up border-l-2 
             {% if forloop.counter == 1 %} border-amber-400
             {% elif forloop.counter == 2 %} border-zinc-300
             {% elif forloop.counter == 3 %} border-amber-700
@@ -36,14 +35,14 @@
 
             <!-- Giant Watermark Number for Top 3 -->
             {% if forloop.counter <= 3 %}
-            <div class="absolute right-28 top-1/2 -translate-y-1/2 text-7xl font-black text-white/[0.03] pointer-events-none select-none italic tracking-tighter group-hover:text-white/[0.05] transition-colors">
+            <div class="absolute right-12 sm:right-28 top-1/2 -translate-y-1/2 text-5xl sm:text-7xl font-black text-white/[0.03] pointer-events-none select-none italic tracking-tighter group-hover:text-white/[0.05] transition-colors">
                 0{{ forloop.counter }}
             </div>
             {% endif %}
 
             <!-- Rank Number -->
-            <div class="w-16 flex justify-center items-center bg-black/40">
-                <span class="text-xl font-bold font-mono 
+            <div class="w-12 sm:w-16 flex justify-center items-center bg-black/40 flex-shrink-0">
+                <span class="text-lg sm:text-xl font-bold font-mono 
                     {% if forloop.counter == 1 %} text-amber-400 drop-shadow-[0_0_8px_rgba(251,191,36,0.3)]
                     {% elif forloop.counter == 2 %} text-zinc-300 drop-shadow-[0_0_8px_rgba(212,212,216,0.3)]
                     {% elif forloop.counter == 3 %} text-amber-700
@@ -53,20 +52,20 @@
             </div>
 
             <!-- Player Details -->
-            <div class="flex-1 flex flex-col justify-center pl-6 z-10 py-2">
-                <h3 class="text-lg md:text-xl font-bold text-zinc-200 uppercase tracking-wide group-hover:text-white transition-colors">
+            <div class="flex-1 flex flex-col justify-center pl-4 sm:pl-6 z-10 py-2 overflow-hidden">
+                <h3 class="text-base sm:text-lg md:text-xl font-bold text-zinc-200 uppercase tracking-wide group-hover:text-white transition-colors truncate">
                     {{ player.name }}
                 </h3>
-                <div class="flex items-center gap-2.5 mt-0.5">
-                    <span class="text-xs font-semibold text-zinc-400 group-hover:text-zinc-300 transition-colors">{{ player.team.name }}</span>
-                    <span class="w-1 h-1 rounded-full bg-zinc-700"></span>
-                    <span class="text-[10px] font-bold text-emerald-500/80 uppercase tracking-wider">{{ player.get_position_display }}</span>
+                <div class="flex items-center gap-1.5 sm:gap-2.5 mt-0.5 truncate">
+                    <span class="text-[10px] sm:text-xs font-semibold text-zinc-400 group-hover:text-zinc-300 transition-colors truncate">{{ player.team.name }}</span>
+                    <span class="w-1 h-1 rounded-full bg-zinc-700 flex-shrink-0"></span>
+                    <span class="text-[9px] sm:text-[10px] font-bold text-emerald-500/80 uppercase tracking-wider flex-shrink-0">{{ player.get_position_display }}</span>
                 </div>
             </div>
 
             <!-- Goals Stat -->
-            <div class="w-24 flex justify-end items-center pr-6 z-10 bg-gradient-to-l from-[#0a0a0a]/80 to-transparent">
-                <span class="text-3xl font-black text-white tracking-tighter">
+            <div class="w-16 sm:w-24 flex justify-end items-center pr-4 sm:pr-6 z-10 bg-gradient-to-l from-[#0a0a0a]/80 to-transparent flex-shrink-0">
+                <span class="text-2xl sm:text-3xl font-black text-white tracking-tighter">
                     {{ player.total_goals }}
                 </span>
             </div>
@@ -74,11 +73,11 @@
         </div>
         {% empty %}
         <!-- Empty State -->
-        <div class="flex flex-col items-center justify-center py-20 border border-zinc-800 border-dashed rounded-lg opacity-0 animate-fade-in-up delay-100">
-            <svg class="w-12 h-12 text-zinc-700 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div class="flex flex-col items-center justify-center py-16 sm:py-20 border border-zinc-800 border-dashed rounded-lg opacity-0 animate-fade-in-up delay-100 px-4 text-center">
+            <svg class="w-10 h-10 sm:w-12 sm:h-12 text-zinc-700 mb-3 sm:mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 3h18v18H3z M3 9h18 M9 21V9"></path>
             </svg>
-            <p class="text-zinc-500 font-medium text-sm uppercase tracking-widest">No goals recorded yet</p>
+            <p class="text-zinc-500 font-medium text-[10px] sm:text-sm uppercase tracking-widest">No goals recorded yet</p>
         </div>
         {% endfor %}
     </div>

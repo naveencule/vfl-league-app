@@ -1,38 +1,38 @@
 {% extends 'league/base.html' %}
 
 {% block content %}
-<div class="max-w-5xl mx-auto space-y-10">
+<div class="max-w-5xl mx-auto space-y-8 sm:space-y-10">
     
     <!-- Minimalist Broadcast-Style Header -->
-    <div class="border-b-2 border-zinc-800 pb-6 opacity-0 animate-fade-in-up">
+    <div class="border-b-2 border-zinc-800 pb-4 sm:pb-6 opacity-0 animate-fade-in-up">
         <h1 class="text-3xl md:text-5xl font-black text-white uppercase tracking-tighter">
             Discipline Radar
         </h1>
-        <p class="text-zinc-500 font-medium mt-2 text-sm uppercase tracking-[0.15em]">
+        <p class="text-zinc-500 font-medium mt-1 sm:mt-2 text-[10px] sm:text-sm uppercase tracking-[0.15em]">
             Fair Play & Suspension Tracking Feed
         </p>
     </div>
 
     <!-- Technical Rule Matrix -->
-    <div class="bg-black/50 border border-zinc-800/80 p-6 opacity-0 animate-fade-in-up delay-100 flex flex-col gap-4 relative">
+    <div class="bg-black/50 border border-zinc-800/80 p-4 sm:p-6 opacity-0 animate-fade-in-up delay-100 flex flex-col gap-3 sm:gap-4 relative overflow-hidden">
         <div class="absolute top-0 right-0 w-32 h-32 bg-rose-500/5 rounded-full blur-3xl pointer-events-none"></div>
         
-        <h3 class="font-bold text-zinc-300 uppercase tracking-[0.2em] text-xs flex items-center gap-2.5">
-            <span class="w-2 h-2 rounded-full bg-rose-600 animate-pulse"></span>
+        <h3 class="font-bold text-zinc-300 uppercase tracking-[0.2em] text-[10px] sm:text-xs flex items-center gap-2 sm:gap-2.5">
+            <span class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-rose-600 animate-pulse"></span>
             Tournament Rules Matrix
         </h3>
         
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-[11px] text-zinc-400 uppercase tracking-wider font-medium mt-2">
-            <div class="bg-[#111111] border border-zinc-800/60 p-4 border-l-2 border-l-rose-500 hover:bg-[#151515] transition-colors">
-                <span class="text-rose-500 font-black block mb-1.5 tracking-widest">Single Match Dismissal</span>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4 text-[9px] sm:text-[11px] text-zinc-400 uppercase tracking-wider font-medium mt-1 sm:mt-2">
+            <div class="bg-[#111111] border border-zinc-800/60 p-3 sm:p-4 border-l-2 border-l-rose-500 hover:bg-[#151515] transition-colors">
+                <span class="text-rose-500 font-black block mb-1 sm:mb-1.5 tracking-widest">Single Match Dismissal</span>
                 2 Yellow Cards in 1 match = Immediate suspension.
             </div>
-            <div class="bg-[#111111] border border-zinc-800/60 p-4 border-l-2 border-l-amber-400 hover:bg-[#151515] transition-colors">
-                <span class="text-amber-400 font-black block mb-1.5 tracking-widest">Accumulation Trap</span>
+            <div class="bg-[#111111] border border-zinc-800/60 p-3 sm:p-4 border-l-2 border-l-amber-400 hover:bg-[#151515] transition-colors">
+                <span class="text-amber-400 font-black block mb-1 sm:mb-1.5 tracking-widest">Accumulation Trap</span>
                 3 Yellow Cards across standard matches = Next-game ban.
             </div>
-            <div class="bg-[#111111] border border-zinc-800/60 p-4 border-l-2 border-l-emerald-500 hover:bg-[#151515] transition-colors">
-                <span class="text-emerald-500 font-black block mb-1.5 tracking-widest">Semi-Final Amnesty</span>
+            <div class="bg-[#111111] border border-zinc-800/60 p-3 sm:p-4 border-l-2 border-l-emerald-500 hover:bg-[#151515] transition-colors">
+                <span class="text-emerald-500 font-black block mb-1 sm:mb-1.5 tracking-widest">Semi-Final Amnesty</span>
                 Accumulated metrics drop to 0 upon SF qualification.
             </div>
         </div>
@@ -41,62 +41,62 @@
     <!-- Live Data Grid Board -->
     <div>
         <!-- Column Headers -->
-        <div class="flex text-[10px] font-bold text-zinc-500 uppercase tracking-[0.2em] mb-2 px-2 opacity-0 animate-fade-in-up delay-200">
-            <div class="w-16 text-center">Status</div>
-            <div class="flex-1 pl-4">Player Details</div>
-            <div class="w-32 text-center">Cards</div>
-            <div class="w-48 text-right pr-4">Eligibility</div>
+        <div class="flex text-[9px] sm:text-[10px] font-bold text-zinc-500 uppercase tracking-[0.2em] mb-2 px-2 opacity-0 animate-fade-in-up delay-200">
+            <div class="w-10 sm:w-16 text-center flex-shrink-0">Status</div>
+            <div class="flex-1 pl-3 sm:pl-4">Player Details</div>
+            <div class="w-16 sm:w-24 md:w-32 text-center flex-shrink-0">Cards</div>
+            <div class="w-24 sm:w-36 md:w-48 text-right pr-3 sm:pr-4 flex-shrink-0">Eligibility</div>
         </div>
 
         <div class="space-y-1.5">
             {% for item in board %}
             <!-- Staggered Row Animation -->
-            <div class="group relative bg-[#111111] hover:bg-[#1a1a1a] transition-all duration-300 flex items-stretch min-h-[72px] opacity-0 animate-fade-in-up border-l-2
+            <div class="group relative bg-[#111111] hover:bg-[#1a1a1a] transition-all duration-300 flex items-stretch min-h-[64px] sm:min-h-[72px] opacity-0 animate-fade-in-up border-l-2
                 {% if item.suspended %} border-rose-600 {% else %} border-zinc-800 hover:border-amber-400 {% endif %}"
                 style="animation-delay: {{ forloop.counter }}50ms;">
 
                 <!-- Status Visualizer (CSS Cards replacing Emojis) -->
-                <div class="w-16 flex justify-center items-center bg-black/40">
+                <div class="w-10 sm:w-16 flex justify-center items-center bg-black/40 flex-shrink-0">
                     {% if item.suspended %}
-                        <div class="w-3.5 h-5 bg-rose-600 rounded-[2px] shadow-[0_0_12px_rgba(225,29,72,0.5)] transform rotate-6 border border-rose-400/50"></div>
+                        <div class="w-2.5 h-4 sm:w-3.5 sm:h-5 bg-rose-600 rounded-[2px] shadow-[0_0_8px_rgba(225,29,72,0.5)] sm:shadow-[0_0_12px_rgba(225,29,72,0.5)] transform rotate-6 border border-rose-400/50"></div>
                     {% else %}
-                        <div class="w-3.5 h-5 bg-amber-400 rounded-[2px] shadow-[0_0_12px_rgba(251,191,36,0.2)] transform -rotate-6 border border-amber-200/50"></div>
+                        <div class="w-2.5 h-4 sm:w-3.5 sm:h-5 bg-amber-400 rounded-[2px] shadow-[0_0_8px_rgba(251,191,36,0.2)] sm:shadow-[0_0_12px_rgba(251,191,36,0.2)] transform -rotate-6 border border-amber-200/50"></div>
                     {% endif %}
                 </div>
 
                 <!-- Player Details -->
-                <div class="flex-1 flex flex-col justify-center pl-6 z-10 py-2">
-                    <h4 class="text-lg font-bold text-zinc-200 uppercase tracking-wide group-hover:text-white transition-colors">
+                <div class="flex-1 flex flex-col justify-center pl-3 sm:pl-6 z-10 py-2 overflow-hidden">
+                    <h4 class="text-sm sm:text-base md:text-lg font-bold text-zinc-200 uppercase tracking-wide group-hover:text-white transition-colors truncate">
                         {{ item.player.name }}
                     </h4>
-                    <p class="text-[10px] text-zinc-500 font-bold uppercase tracking-widest mt-0.5 group-hover:text-zinc-400 transition-colors">
+                    <p class="text-[9px] sm:text-[10px] text-zinc-500 font-bold uppercase tracking-widest mt-0.5 group-hover:text-zinc-400 transition-colors truncate">
                         {{ item.player.team.name }}
                     </p>
                 </div>
 
                 <!-- Card Count Stat -->
-                <div class="w-32 flex justify-center items-center border-l border-r border-zinc-800/50 bg-black/20">
+                <div class="w-16 sm:w-24 md:w-32 flex justify-center items-center border-l border-r border-zinc-800/50 bg-black/20 flex-shrink-0">
                     <div class="text-center">
-                        <span class="font-mono text-2xl font-black text-white leading-none block">{{ item.yellows }}</span>
-                        <span class="text-[9px] text-zinc-500 uppercase tracking-widest font-bold mt-1 block">Yellows</span>
+                        <span class="font-mono text-lg sm:text-xl md:text-2xl font-black text-white leading-none block">{{ item.yellows }}</span>
+                        <span class="text-[8px] sm:text-[9px] text-zinc-500 uppercase tracking-widest font-bold mt-1 block">Yel<span class="hidden sm:inline">lows</span></span>
                     </div>
                 </div>
 
                 <!-- Eligibility Status -->
-                <div class="w-48 flex justify-end items-center pr-6 z-10 bg-gradient-to-l from-[#0a0a0a]/80 to-transparent">
-                    <div class="text-right">
+                <div class="w-24 sm:w-36 md:w-48 flex justify-end items-center pr-3 sm:pr-6 z-10 bg-gradient-to-l from-[#0a0a0a]/80 to-transparent flex-shrink-0">
+                    <div class="text-right overflow-hidden w-full pl-2">
                         {% if item.suspended %}
-                            <span class="text-xs font-black text-rose-500 uppercase tracking-widest block drop-shadow-[0_0_8px_rgba(225,29,72,0.3)]">
+                            <span class="text-[9px] sm:text-[10px] md:text-xs font-black text-rose-500 uppercase tracking-widest block drop-shadow-[0_0_8px_rgba(225,29,72,0.3)] truncate">
                                 Suspended
                             </span>
-                            <span class="text-[9px] text-zinc-500 uppercase tracking-widest block mt-0.5">
+                            <span class="text-[8px] sm:text-[9px] text-zinc-500 uppercase tracking-widest block mt-0.5 truncate">
                                 {{ item.reason }}
                             </span>
                         {% else %}
-                            <span class="text-xs font-black text-emerald-500 uppercase tracking-widest block drop-shadow-[0_0_8px_rgba(16,185,129,0.2)]">
+                            <span class="text-[9px] sm:text-[10px] md:text-xs font-black text-emerald-500 uppercase tracking-widest block drop-shadow-[0_0_8px_rgba(16,185,129,0.2)] truncate">
                                 Eligible
                             </span>
-                            <span class="text-[9px] text-zinc-500 uppercase tracking-widest block mt-0.5">
+                            <span class="text-[8px] sm:text-[9px] text-zinc-500 uppercase tracking-widest block mt-0.5 truncate">
                                 Cleared to Play
                             </span>
                         {% endif %}
@@ -106,12 +106,12 @@
             </div>
             {% empty %}
             <!-- Empty State -->
-            <div class="flex flex-col items-center justify-center py-20 border border-zinc-800 border-dashed rounded-lg opacity-0 animate-fade-in-up delay-100 bg-[#111111]/50">
-                <svg class="w-12 h-12 text-emerald-500/40 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="flex flex-col items-center justify-center py-16 sm:py-20 border border-zinc-800 border-dashed rounded-lg opacity-0 animate-fade-in-up delay-100 bg-[#111111]/50 px-4 text-center">
+                <svg class="w-10 h-10 sm:w-12 sm:h-12 text-emerald-500/40 mb-3 sm:mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                 </svg>
-                <p class="text-zinc-400 font-bold text-xs uppercase tracking-widest">Perfect Discipline Status</p>
-                <p class="text-zinc-600 font-medium text-[10px] uppercase tracking-wider mt-1">No active infractions on record</p>
+                <p class="text-zinc-400 font-bold text-[10px] sm:text-xs uppercase tracking-widest">Perfect Discipline Status</p>
+                <p class="text-zinc-600 font-medium text-[9px] sm:text-[10px] uppercase tracking-wider mt-1">No active infractions on record</p>
             </div>
             {% endfor %}
         </div>
