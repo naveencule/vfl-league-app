@@ -1,0 +1,30 @@
+{% extends 'league/base.html' %}
+{% block content %}
+<div class="max-w-2xl mx-auto bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+    <div class="p-6 bg-gradient-to-r from-emerald-800 to-teal-800 text-white">
+        <h1 class="text-2xl font-bold">👟 Golden Boot Race</h1>
+        <p class="text-emerald-200 text-sm mt-1">Top individual goalscorers leaderboard</p>
+    </div>
+
+    <ul class="divide-y divide-gray-100">
+        {% for player in scorers %}
+        <li class="flex items-center justify-between p-5 hover:bg-gray-50 transition">
+            <div class="flex items-center space-x-4">
+                <span class="text-lg font-bold text-gray-400 w-6">#{{ forloop.counter }}</span>
+                <div>
+                    <h3 class="font-bold text-gray-900 text-base">{{ player.name }}</h3>
+                    <p class="text-xs text-gray-500 font-medium uppercase tracking-wider">{{ player.get_position_display }} &bull; {{ player.team.name }}</p>
+                </div>
+            </div>
+            <div class="text-right">
+                <span class="bg-emerald-100 text-emerald-800 font-black px-4 py-2 rounded-full text-base">
+                    {{ player.total_goals }} Goals
+                </span>
+            </div>
+        </li>
+        {% empty %}
+        <li class="text-center py-10 text-gray-400">No matching goals have occurred yet.</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

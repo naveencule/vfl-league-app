@@ -1,0 +1,107 @@
+{% extends 'league/base.html' %}
+{% block content %}
+<div class="space-y-8">
+    <div class="border-b border-gray-200 pb-4">
+        <h1 class="text-3xl font-black text-gray-900 tracking-tight">System Admin Control Center</h1>
+        <p class="text-gray-500">Add entities and access live real-time match logging arrays.</p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        
+        <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-xs flex flex-col justify-between">
+            <div>
+                <h2 class="text-lg font-bold text-gray-800 border-b pb-3 mb-4">🛡️ Register New Team</h2>
+                <form method="POST" enctype="multipart/form-data" class="space-y-4">
+                    {% csrf_token %}
+                    <input type="hidden" name="submit_team" value="1">
+                    
+                    {% for field in team_form %}
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1">{{ field.label }}</label>
+                        {{ field }}
+                    </div>
+                    {% endfor %}
+                    
+                    <button type="submit" class="w-full mt-2 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 rounded transition cursor-pointer">Save Team Info</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-xs flex flex-col justify-between">
+            <div>
+                <h2 class="text-lg font-bold text-gray-800 border-b pb-3 mb-4">🏃 Enlist New Player Profile</h2>
+                <form method="POST" class="space-y-4">
+                    {% csrf_token %}
+                    <input type="hidden" name="submit_player" value="1">
+                    
+                    {% for field in player_form %}
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1">{{ field.label }}</label>
+                        {{ field }}
+                    </div>
+                    {% endfor %}
+                    
+                    <button type="submit" class="w-full mt-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 rounded transition cursor-pointer">Register Player</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-xs flex flex-col justify-between">
+            <div>
+                <h2 class="text-lg font-bold text-gray-800 border-b pb-3 mb-4">📅 Schedule New Match</h2>
+                <form method="POST" class="space-y-4">
+                    {% csrf_token %}
+                    <input type="hidden" name="submit_match" value="1">
+                    
+                    {% for field in match_form %}
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1">{{ field.label }}</label>
+                        {{ field }}
+                    </div>
+                    {% endfor %}
+                    
+                    <button type="submit" class="w-full mt-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 rounded transition cursor-pointer">Generate Fixture</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-white border border-gray-200 rounded-xl shadow-xs overflow-hidden">
+        <div class="p-5 bg-gray-50 border-b border-gray-200">
+            <h2 class="text-lg font-bold text-gray-800">📅 Match Schedules & Live Record Engine</h2>
+        </div>
+        <div class="divide-y divide-gray-100">
+            {% for match in matches %}
+            <div class="p-5 flex flex-col sm:flex-row items-center justify-between gap-4 hover:bg-gray-50 transition">
+                <div class="flex items-center space-x-6">
+                    <span class="text-sm font-semibold px-2 py-1 rounded {% if match.status == 'Played' %}bg-gray-200 text-gray-700{% else %}bg-green-100 text-green-800{% endif %}">
+                        {{ match.status }}
+                    </span>
+                    <div class="text-base font-medium">
+                        <span class="font-bold text-gray-900">{{ match.home_team.name }}</span>
+                        <span class="mx-2 text-gray-400 font-bold">
+                            {% if match.status == 'Played' %}{{ match.home_score }} - {{ match.away_score }}{% else %}vs{% endif %}
+                        </span>
+                        <span class="font-bold text-gray-900">{{ match.away_team.name }}</span>
+                        <span class="text-xs text-gray-400 block sm:inline sm:ml-4 font-normal">({{ match.match_date|date:"M d, Y H:i" }})</span>
+                    </div>
+                </div>
+                <div>
+                    <a href="{% url 'manage_match_events' match.id %}" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-4 py-2 rounded text-sm shadow-xs transition inline-block">
+                        Manage Events & Score &rarr;
+                    </a>
+                </div>
+            </div>
+            {% empty %}
+            <div class="p-8 text-center text-gray-400">No scheduled matches found in SQLite storage. Create one above!</div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<script>
+    document.querySelectorAll('.space-y-4 input[type="text"], .space-y-4 select, .space-y-4 input[type="number"]').forEach(el => {
+        el.classList.add('w-full', 'border', 'border-gray-300', 'p-2', 'rounded', 'text-sm', 'bg-white');
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,50 @@
+{% extends 'league/base.html' %}
+{% block content %}
+<div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+    <div class="p-6 bg-gradient-to-r from-blue-900 to-indigo-900 text-white">
+        <h1 class="text-2xl font-bold">League Standings</h1>
+        <p class="text-blue-200 text-sm mt-1">Real-time update logic tracked natively</p>
+    </div>
+    
+    <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse">
+            <thead>
+                <tr class="bg-gray-100 border-b border-gray-200 text-gray-600 uppercase text-xs font-bold tracking-wider">
+                    <th class="px-6 py-4 text-center">Pos</th>
+                    <th class="px-6 py-4">Team Club</th>
+                    <th class="px-4 py-4 text-center">MP</th>
+                    <th class="px-4 py-4 text-center">W</th>
+                    <th class="px-4 py-4 text-center">D</th>
+                    <th class="px-4 py-4 text-center">L</th>
+                    <th class="px-4 py-4 text-center">GF</th>
+                    <th class="px-4 py-4 text-center">GA</th>
+                    <th class="px-4 py-4 text-center">GD</th>
+                    <th class="px-6 py-4 text-center bg-blue-50 text-blue-900 font-black">Pts</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-100 text-sm font-medium text-gray-700">
+                {% for row in table %}
+                <tr class="hover:bg-gray-50 transition">
+                    <td class="px-6 py-4 text-center font-bold text-gray-500">{{ forloop.counter }}</td>
+                    <td class="px-6 py-4 font-semibold text-gray-900 text-base">{{ row.team.name }}</td>
+                    <td class="px-4 py-4 text-center">{{ row.mp }}</td>
+                    <td class="px-4 py-4 text-center text-green-600">{{ row.w }}</td>
+                    <td class="px-4 py-4 text-center text-gray-500">{{ row.d }}</td>
+                    <td class="px-4 py-4 text-center text-red-600">{{ row.l }}</td>
+                    <td class="px-4 py-4 text-center">{{ row.gf }}</td>
+                    <td class="px-4 py-4 text-center">{{ row.ga }}</td>
+                    <td class="px-4 py-4 text-center {% if row.gd > 0 %}text-green-600{% elif row.gd < 0 %}text-red-600{% endif %}">
+                        {% if row.gd > 0 %}+{% endif %}{{ row.gd }}
+                    </td>
+                    <td class="px-6 py-4 text-center bg-blue-50/50 text-blue-900 text-base font-black">{{ row.pts }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="10" class="text-center py-8 text-gray-400 font-normal">No operational team entries logged.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,61 @@
+{% extends 'league/base.html' %}
+{% block content %}
+<div class="max-w-4xl mx-auto space-y-8 animate-fade-in">
+    <div class="border-b border-gray-200 pb-4">
+        <h1 class="text-3xl font-black text-gray-900 tracking-tight">Fair Play & Suspension Tracking Radar</h1>
+        <p class="text-gray-500 text-sm">Official tracking feed monitoring card limits, semi-final resets, and active match bans.</p>
+    </div>
+
+    <!-- Rule Explanation Notice Block Box Callout -->
+    <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 text-xs text-slate-600 space-y-1.5 shadow-2xs">
+        <p class="font-bold text-slate-800 uppercase tracking-wider">Tournament Disciplinary Rules Matrix:</p>
+        <p>• 🟥 **Single Match Dismissal:** Getting 2 Yellow Cards in 1 match results in an immediate suspension.</p>
+        <p>• 🟨 **Accumulation Trap:** Collecting 3 Yellow Cards across different standard group league matches triggers a automatic next-game ban.</p>
+        <p>• 🔄 **Semi-Final Amnesty:** All accumulated yellow metrics drop back down to **0** upon qualifying for the semi-finals.</p>
+    </div>
+
+    <!-- Main Live Data Grid Board Presentation -->
+    <div class="bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden">
+        <div class="p-4 bg-gray-50 border-b border-gray-200 font-bold text-gray-800 text-sm">
+            Live Player Disciplinary Registry Logs
+        </div>
+        
+        <div class="divide-y divide-gray-100">
+            {% for item in board %}
+            <div class="p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 {% if item.suspended %}bg-red-50/30{% endif %} hover:bg-gray-50/60 transition">
+                <div class="flex items-center space-x-4">
+                    <div class="text-2xl">
+                        {% if item.suspended %}❌{% else %}🟨{% endif %}
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-gray-950 text-base">{{ item.player.name }}</h4>
+                        <p class="text-xs text-gray-500 font-semibold">{{ item.player.team.name }}</p>
+                    </div>
+                </div>
+                
+                <div class="flex items-center space-x-6 justify-between sm:justify-end">
+                    <div class="text-sm font-medium text-gray-600">
+                        Cards: <span class="font-mono font-bold text-gray-950">{{ item.yellows }}</span> Yellows
+                    </div>
+                    <div>
+                        {% if item.suspended %}
+                        <span class="bg-red-100 text-red-800 border border-red-200 font-bold text-xs px-3 py-1 rounded-full uppercase tracking-wide">
+                            ⛔ Suspended ({{ item.reason }})
+                        </span>
+                        {% else %}
+                        <span class="bg-green-100 text-green-800 border border-green-200 font-bold text-xs px-3 py-1 rounded-full uppercase tracking-wide">
+                            ✅ Cleared Eligible
+                        </span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="p-12 text-center text-gray-400 italic text-sm">
+                No active tracking infractions on record. The league is currently displaying perfect discipline status!
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

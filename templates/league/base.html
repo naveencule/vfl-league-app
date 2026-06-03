@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Championship Football League</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+<body class="bg-gray-50 text-gray-800 min-h-screen flex flex-col">
+
+    <nav class="bg-blue-900 text-white shadow-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center space-x-3">
+                    <span class="text-xl font-black tracking-wider text-yellow-400">🏆 LEAGUE MASTER</span>
+                </div>
+                <div class="flex space-x-4 font-medium text-sm">
+                    <a href="{% url 'standings' %}" class="hover:text-yellow-300 transition">Standings</a>
+                    <a href="{% url 'top_scorers' %}" class="hover:text-yellow-300 transition">Top Scorers</a>
+                    <a href="{% url 'clean_sheets' %}" class="hover:text-yellow-300 transition">Clean Sheets</a>
+                    <a href="{% url 'disciplinary_board' %}" class="hover:text-yellow-300 transition">Discipline Radar</a>
+                    {% if user.is_staff %}
+<a href="{% url 'admin_dashboard' %}" class="hover:text-yellow-300 transition">Schedules</a>
+<a href="{% url 'manage_rosters' %}" class="hover:text-yellow-300 transition">Manage Rosters</a>
+{% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="bg-gray-800 text-gray-400 text-center py-4 text-xs border-t border-gray-700">
+        &copy; 2026 Football League Hub Engine. Built cleanly with custom Django controllers.
+    </footer>
+
+</body>
+</html>

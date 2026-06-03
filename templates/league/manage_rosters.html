@@ -1,0 +1,98 @@
+{% extends 'league/base.html' %}
+{% block content %}
+<div class="space-y-8 animate-fade-in">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between border-b border-gray-200 pb-4 gap-4">
+        <div>
+            <h1 class="text-3xl font-black text-gray-900 tracking-tight">Club Roster Directory</h1>
+            <p class="text-gray-500 text-sm">Review, adjust, or update club details and active players.</p>
+        </div>
+        <a href="{% url 'admin_dashboard' %}" class="bg-gray-800 hover:bg-gray-700 text-white font-bold px-4 py-2 rounded-xl text-sm transition">
+            &larr; Return to Dashboard
+        </a>
+    </div>
+
+    <div class="grid grid-cols-1 gap-8">
+        {% for team in teams %}
+        <div class="bg-white border border-gray-200 rounded-2xl shadow-xs overflow-hidden">
+            
+            <div class="p-5 bg-slate-50 border-b border-gray-200 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <div class="flex items-center space-x-4">
+                    {% if team.logo %}
+                    <img src="{{ team.logo.url }}" class="w-12 h-12 object-contain rounded-lg border bg-white p-1">
+                    {% else %}
+                    <div class="w-12 h-12 bg-indigo-100 text-indigo-700 font-bold rounded-lg flex items-center justify-center border text-sm">🛡️</div>
+                    {% endif %}
+                    <div>
+                        <h2 class="text-xl font-bold text-gray-900">{{ team.name }}</h2>
+                        <p class="text-xs text-gray-500 font-medium">📍 Home Ground: <span class="text-gray-700 font-semibold">{{ team.home_ground }}</span></p>
+                    </div>
+                </div>
+                <div>
+                    <a href="{% url 'edit_team' team.id %}" class="inline-flex items-center text-xs bg-indigo-50 text-indigo-700 font-bold px-3 py-2 rounded-xl border border-indigo-100 hover:bg-indigo-100 transition cursor-pointer">
+                        ✏️ Edit Team Info
+                    </a>
+                </div>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse text-sm">
+                    <thead>
+                        <tr class="bg-gray-50/70 border-b border-gray-200 text-gray-500 uppercase font-bold tracking-wider text-xs">
+                            <th class="px-6 py-3 w-20 text-center">Jersey</th>
+                            <th class="px-6 py-3">Player Name</th>
+                            <th class="px-6 py-3">Position Category</th>
+                            <th class="px-6 py-3 text-right">Operations</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-100 text-gray-700 font-medium">
+                        {% for player in team.players.all %}
+                        <tr class="hover:bg-gray-50/50 transition {% if player.disciplinary_status.is_suspended %}bg-red-50/40{% endif %}">
+                            <td class="px-6 py-3.5 text-center font-mono font-bold text-gray-400">#{{ player.jersey_number }}</td>
+                            <td class="px-6 py-3.5">
+                                <div class="flex flex-wrap items-center gap-2">
+                                    <span class="font-bold text-gray-900 text-base">{{ player.name }}</span>
+                                    
+                                    {% if player.disciplinary_status.is_suspended %}
+                                        <span class="bg-red-600 text-white text-[10px] font-black px-2 py-0.5 rounded-sm uppercase tracking-wide animate-pulse">
+                                            🚫 Suspended: {{ player.disciplinary_status.reason }}
+                                        </span>
+                                    {% elif player.disciplinary_status.yellow_count > 0 %}
+                                        <span class="bg-amber-100 text-amber-800 text-[10px] font-bold px-2 py-0.5 rounded-sm border border-amber-200">
+                                            ⚠ {{ player.disciplinary_status.yellow_count }}/3 Yellows
+                                        </span>
+                                    {% endif %}
+                                </div>
+                            </td>
+                            <td class="px-6 py-3.5">
+                                <span class="bg-gray-100 text-gray-700 text-xs px-2.5 py-1 rounded-md font-semibold">
+                                    {{ player.get_position_display }}
+                                </span>
+                            </td>
+                            <td class="px-6 py-3.5 text-right">
+                                {% if player.id %}
+                                <a href="{% url 'edit_player' player.id %}" class="text-blue-600 hover:text-blue-800 hover:underline text-xs font-bold cursor-pointer">
+                                    Modify Profile &rarr;
+                                </a>
+                                {% else %}
+                                <span class="text-xs text-red-400 italic">Missing Database ID</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4" class="text-center py-6 text-gray-400 font-normal italic">No registered players found matching this club.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+        {% empty %}
+        <div class="bg-white p-12 text-center rounded-2xl border border-gray-200 text-gray-400">
+            No dynamic team assets configured yet.
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
