@@ -38,16 +38,18 @@ class TeamEditForm(forms.ModelForm):
             'name': forms.TextInput(attrs={'class': 'w-full border border-gray-300 p-2.5 rounded-xl text-sm bg-white font-medium'}),
             'home_ground': forms.TextInput(attrs={'class': 'w-full border border-gray-300 p-2.5 rounded-xl text-sm bg-white font-medium'}),
         }
+from django import forms
+from .models import Player
 
 class PlayerEditForm(forms.ModelForm):
     class Meta:
         model = Player
         fields = ['name', 'team', 'position', 'jersey_number']
         widgets = {
-            'name': forms.TextInput(attrs={'class': 'w-full border border-gray-300 p-2.5 rounded-xl text-sm bg-white font-medium'}),
-            'team': forms.Select(attrs={'class': 'w-full border border-gray-300 p-2.5 rounded-xl text-sm bg-white font-medium'}),
-            'position': forms.Select(attrs={'class': 'w-full border border-gray-300 p-2.5 rounded-xl text-sm bg-white font-medium'}),
-            'jersey_number': forms.NumberInput(attrs={'class': 'w-full border border-gray-300 p-2.5 rounded-xl text-sm bg-white font-medium'}),
+            'name': forms.TextInput(attrs={'class': 'w-full border border-gray-300 p-2.5 rounded-xl text-sm bg-white font-medium focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition'}),
+            'team': forms.Select(attrs={'class': 'w-full border border-gray-300 p-2.5 rounded-xl text-sm bg-white font-medium focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition'}),
+            'position': forms.Select(attrs={'class': 'w-full border border-gray-300 p-2.5 rounded-xl text-sm bg-white font-medium focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition'}),
+            'jersey_number': forms.NumberInput(attrs={'class': 'w-full border border-gray-300 p-2.5 rounded-xl text-sm bg-white font-medium focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition'}),
         }
 
 # ==========================================
@@ -274,18 +276,29 @@ def edit_team(request, team_id):
     return render(request, 'league/edit_team.html', {'form': form, 'team': team})
 
 
+from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib import messages # Optional: for user feedback
+
 @vfl_admin_required
 def edit_player(request, player_id):
     """Fetches a specific player object instance and updates their team or position values."""
     player = get_object_or_404(Player, id=player_id)
+    
     if request.method == 'POST':
+        # Bind the incoming POST data to the existing player instance
         form = PlayerEditForm(request.POST, instance=player)
         if form.is_valid():
             form.save()
+            # Optional: messages.success(request, f"{player.name}'s profile updated successfully!")
             return redirect('manage_rosters')
     else:
+        # GET request: Instantiate the form with the player's existing data
         form = PlayerEditForm(instance=player)
-    return render(request, 'league/edit_player.html', {'form': form, 'player': player})
+        
+    return render(request, 'league/edit_player.html', {
+        'form': form, 
+        'player': player
+    })
 
 
 # league/views.py
