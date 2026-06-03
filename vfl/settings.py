@@ -143,3 +143,28 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+
+
+# vfl/settings.py (Add to the very bottom of the file)
+
+import os
+from django.db.models.signals import post_migrate
+from django.contrib.auth import get_user_model
+
+def create_render_superuser(sender, **kwargs):
+    """Automatically builds a secure administrative profile during deployment tasks."""
+    User = get_user_model()
+    username = os.environ.get("DJANGO_SUPERUSER_USERNAME")
+    email = os.environ.get("DJANGO_SUPERUSER_EMAIL")
+    password = os.environ.get("DJANGO_SUPERUSER_PASSWORD")
+    
+    if username and password:
+        if not User.objects.filter(username=username).exists():
+            User.objects.create_superuser(username=username, email=email, password=password)
+            print(f"==> Superuser '{username}' initialized successfully!")
+        else:
+            print(f"==> Superuser '{username}' already exists. Skipping setup.")
+
+# Hook this function to run automatically immediately after migrations finish
+post_migrate.connect(create_render_superuser)
