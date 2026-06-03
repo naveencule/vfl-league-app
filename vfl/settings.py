@@ -77,28 +77,25 @@ WSGI_APPLICATION = 'vfl.wsgi.application'
 import os
 from pathlib import Path
 
-# ... keep your existing configurations ...
+import os
+import dj_database_url
+from pathlib import Path
+
+# ... keep your other settings same ...
 
 IS_RENDER = os.environ.get('RENDER', False)
 
 if IS_RENDER:
-    # Ensure the /data directory exists right before Django touches it
-    DATA_DIR = '/data'
-    if not os.path.exists(DATA_DIR):
-        try:
-            os.makedirs(DATA_DIR, exist_ok=True)
-        except OSError:
-            # Fallback path if the build environment restricts root-level creations
-            DATA_DIR = os.path.join(BASE_DIR, 'data')
-            os.makedirs(DATA_DIR, exist_ok=True)
-
+    # Read the DATABASE_URL from Render and parse it automatically into Django format
     DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': os.path.join(DATA_DIR, 'db.sqlite3'),
-        }
+        'default': dj_database_url.config(
+            env='DATABASE_URL',
+            conn_max_age=600,  # Keeps database connections alive for better performance
+            conn_health_checks=True,
+        )
     }
 else:
+    # Local development settings (Keep using your fast local SQLite file)
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
