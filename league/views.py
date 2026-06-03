@@ -118,12 +118,27 @@ def top_scorers(request):
 def clean_sheets_leaderboard(request):
     teams = Team.objects.all()
     leaderboard = []
+    
     for team in teams:
+        # 1. Pull the team's dynamic clean sheets count
+        cs_count = team.statistics['cs']
+        
+        # 2. Grab the goalkeeper(s) assigned to this specific team
+        # Using .first() handles cases where a team has one clear starter.
+        keeper = team.players.filter(position='GK').first()
+        
+        # 3. Fallback name if a team doesn't have a goalkeeper assigned in the DB yet
+        keeper_name = keeper.name if keeper else "No Active Goalkeeper"
+        
         leaderboard.append({
-            'team': team,
-            'clean_sheets': team.statistics['cs']
+            'keeper_name': keeper_name,
+            'club_name': team.name,
+            'clean_sheets': cs_count
         })
+        
+    # Sort the list by clean sheets descending
     sorted_leaderboard = sorted(leaderboard, key=lambda x: -x['clean_sheets'])
+    
     return render(request, 'league/clean_sheets.html', {'leaderboard': sorted_leaderboard})
 
 
