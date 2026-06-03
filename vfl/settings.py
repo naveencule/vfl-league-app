@@ -73,16 +73,29 @@ WSGI_APPLICATION = 'vfl.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
-
+# vfl/settings.py
 import os
+from pathlib import Path
+
+# ... keep your existing configurations ...
 
 IS_RENDER = os.environ.get('RENDER', False)
 
 if IS_RENDER:
+    # Ensure the /data directory exists right before Django touches it
+    DATA_DIR = '/data'
+    if not os.path.exists(DATA_DIR):
+        try:
+            os.makedirs(DATA_DIR, exist_ok=True)
+        except OSError:
+            # Fallback path if the build environment restricts root-level creations
+            DATA_DIR = os.path.join(BASE_DIR, 'data')
+            os.makedirs(DATA_DIR, exist_ok=True)
+
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': '/data/db.sqlite3',  # Points straight to our permanent storage disk
+            'NAME': os.path.join(DATA_DIR, 'db.sqlite3'),
         }
     }
 else:
@@ -92,7 +105,6 @@ else:
             'NAME': BASE_DIR / 'db.sqlite3',
         }
     }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
