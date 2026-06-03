@@ -1,163 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Championship Football League</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+<body class="bg-gray-50 text-gray-800 min-h-screen flex flex-col">
 
-<style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  .mock-wrap {
-    background: var(--color-background-secondary);
-    border-radius: var(--border-radius-lg);
-    border: 0.5px solid var(--color-border-tertiary);
-    overflow: hidden;
-  }
-  nav {
-    background: #0C447C;
-    padding: 0 24px;
-    height: 56px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-  }
-  .brand {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    flex-shrink: 0;
-    text-decoration: none;
-  }
-  .brand-icon {
-    width: 30px; height: 30px;
-    background: #BA7517;
-    border-radius: var(--border-radius-md);
-    display: flex; align-items: center; justify-content: center;
-  }
-  .brand-icon i { font-size: 16px; color: #FAEEDA; }
-  .brand-name {
-    font-size: 14px;
-    font-weight: 500;
-    color: #E6F1FB;
-    letter-spacing: 0.03em;
-  }
-  .brand-name span {
-    font-size: 11px;
-    display: block;
-    color: #85B7EB;
-    font-weight: 400;
-    letter-spacing: 0.01em;
-    line-height: 1.3;
-  }
-  .nav-links {
-    display: flex;
-    align-items: center;
-    gap: 2px;
-    flex: 1;
-    justify-content: center;
-  }
-  .nav-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    font-size: 13px;
-    font-weight: 400;
-    color: #B5D4F4;
-    padding: 6px 11px;
-    border-radius: var(--border-radius-md);
-    text-decoration: none;
-    transition: background 0.12s, color 0.12s;
-    white-space: nowrap;
-  }
-  .nav-link i { font-size: 14px; }
-  .nav-link:hover { background: rgba(255,255,255,0.08); color: #E6F1FB; }
-  .nav-link.active { background: rgba(255,255,255,0.12); color: #fff; }
-  .nav-divider {
-    width: 0.5px;
-    height: 20px;
-    background: rgba(255,255,255,0.12);
-    margin: 0 4px;
-    flex-shrink: 0;
-  }
-  .admin-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    font-size: 12px;
-    font-weight: 500;
-    color: #BA7517;
-    background: #FAC775;
-    border-radius: var(--border-radius-md);
-    padding: 4px 10px;
-    text-decoration: none;
-    white-space: nowrap;
-  }
-  .admin-pill i { font-size: 13px; }
+    <!-- Premium Production-Level Header -->
+    <nav class="bg-slate-900 text-slate-100 border-b border-slate-800 sticky top-0 z-50 backdrop-blur-md bg-opacity-95 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                
+                <!-- Brand / Logo -->
+                <div class="flex items-center">
+                    <span class="text-lg font-black tracking-widest uppercase text-white">
+                        LEAGUE<span class="text-emerald-400">MASTER</span>
+                    </span>
+                </div>
+                
+                <!-- Navigation Links -->
+                <div class="flex items-center space-x-1 text-sm font-semibold tracking-wide">
+                    <a href="{% url 'standings' %}" class="text-slate-300 hover:text-white hover:bg-slate-800 px-3 py-2 rounded-md transition duration-200">
+                        Standings
+                    </a>
+                    <a href="{% url 'top_scorers' %}" class="text-slate-300 hover:text-white hover:bg-slate-800 px-3 py-2 rounded-md transition duration-200">
+                        Top Scorers
+                    </a>
+                    <a href="{% url 'clean_sheets' %}" class="text-slate-300 hover:text-white hover:bg-slate-800 px-3 py-2 rounded-md transition duration-200">
+                        Clean Sheets
+                    </a>
+                    <a href="{% url 'disciplinary_board' %}" class="text-slate-300 hover:text-white hover:bg-slate-800 px-3 py-2 rounded-md transition duration-200 mr-2">
+                        Discipline Radar
+                    </a>
+                    
+                    <!-- Staff / Administration Portal Links -->
+                    {% if user.is_staff %}
+                    <div class="h-5 w-[1px] bg-slate-700 mx-2 hidden sm:block"></div>
+                    <a href="{% url 'admin_dashboard' %}" class="text-emerald-400 hover:text-white hover:bg-emerald-500/10 px-3 py-2 rounded-md transition duration-200 font-medium bg-emerald-500/5 border border-emerald-500/20">
+                        Schedules
+                    </a>
+                    <a href="{% url 'manage_rosters' %}" class="text-emerald-400 hover:text-white hover:bg-emerald-500/10 px-3 py-2 rounded-md transition duration-200 font-medium bg-emerald-500/5 border border-emerald-500/20">
+                        Manage Rosters
+                    </a>
+                    {% endif %}
+                </div>
 
-  .page-chrome {
-    background: var(--color-background-tertiary);
-    padding: 20px 24px;
-    border-top: 0.5px solid rgba(255,255,255,0.06);
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .breadcrumb { font-size: 12px; color: var(--color-text-tertiary); display: flex; align-items: center; gap: 6px; }
-  .breadcrumb i { font-size: 12px; }
-  .page-title { font-size: 18px; font-weight: 500; color: var(--color-text-primary); margin-top: 4px; }
+            </div>
+        </div>
+    </nav>
 
-  footer {
-    background: #042C53;
-    padding: 12px 24px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border-top: 0.5px solid rgba(255,255,255,0.08);
-    flex-wrap: wrap;
-    gap: 8px;
-  }
-  .footer-brand { display: flex; align-items: center; gap: 8px; }
-  .footer-brand i { font-size: 14px; color: #378ADD; }
-  .footer-text { font-size: 12px; color: #85B7EB; }
-  .footer-copy { font-size: 11px; color: #185FA5; }
-</style>
+    <!-- Main Content Area -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {% block content %}{% endblock %}
+    </main>
 
-<h2 class="sr-only">Preview of the Championship Football League navigation header and footer.</h2>
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-gray-400 text-center py-4 text-xs border-t border-gray-700">
+        &copy; 2026 Football League Hub Engine. Built cleanly with custom Django controllers.
+    </footer>
 
-<div class="mock-wrap">
-  <nav>
-    <a class="brand" href="#">
-      <div class="brand-icon"><i class="ti ti-trophy" aria-hidden="true"></i></div>
-      <div>
-        <div class="brand-name">League Master</div>
-        <span>Championship Football</span>
-      </div>
-    </a>
-
-    <div class="nav-links">
-      <a class="nav-link active" href="#"><i class="ti ti-list-numbers" aria-hidden="true"></i> Standings</a>
-      <a class="nav-link" href="#"><i class="ti ti-ball-football" aria-hidden="true"></i> Top scorers</a>
-      <a class="nav-link" href="#"><i class="ti ti-shield-check" aria-hidden="true"></i> Clean sheets</a>
-      <a class="nav-link" href="#"><i class="ti ti-alert-triangle" aria-hidden="true"></i> Discipline</a>
-
-      <div class="nav-divider"></div>
-
-      <a class="admin-pill" href="#"><i class="ti ti-calendar" aria-hidden="true"></i> Schedules</a>
-      <a class="nav-link" href="#" style="color:#B5D4F4;"><i class="ti ti-users" aria-hidden="true"></i> Rosters</a>
-    </div>
-  </nav>
-
-  <div class="page-chrome">
-    <div>
-      <div class="breadcrumb">
-        <i class="ti ti-home" aria-hidden="true"></i>
-        <i class="ti ti-chevron-right" aria-hidden="true"></i>
-        <span>Standings</span>
-      </div>
-      <div class="page-title">League standings</div>
-    </div>
-  </div>
-
-  <footer>
-    <div class="footer-brand">
-      <i class="ti ti-trophy" aria-hidden="true"></i>
-      <span class="footer-text">Football League Hub Engine</span>
-    </div>
-    <span class="footer-copy">&copy; 2026 — Built with Django</span>
-  </footer>
-</div>
+</body>
+</html>
